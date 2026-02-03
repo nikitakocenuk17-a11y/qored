@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qored</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h2>Qored</h2>
+    <p class="subtitle" id="userText">Загрузка...</p>
+
+    <button id="logoutBtn">Выйти</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script>
+    async function loadUser() {
+      const { data: { user } } = await window.sb.auth.getUser();
+      const el = document.getElementById("userText");
+
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      el.innerHTML = "Вы вошли как:<br><b style='color:#fff'>" + (user.email || "") + "</b>";
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await window.sb.auth.signOut();
+      window.location.href = "login.html";
+    });
+
+    loadUser();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+// EmailJS конфигурация
+const EMAILJS_PUBLIC_KEY = "dZzCXb349brGeGuZN";
+const EMAILJS_SERVICE_ID = "service_rlxs23t";
+const EMAILJS_TEMPLATE_ID = "template_9tryaqq";

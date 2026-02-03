@@ -1,0 +1,73 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const alertBox = document.getElementById("alertBoxReg");
+  const emailInput = document.getElementById("emailInputReg");
+  const passInput = document.getElementById("passInputReg");
+  const sendBtn = document.getElementById("sendBtnReg");
+
+  const eyeWrap = document.getElementById("eyeReg");
+  const eyeOpenSvg = document.getElementById("eyeOpenReg");
+  const eyeClosedSvg = document.getElementById("eyeClosedReg");
+
+  initPasswordEye(passInput, eyeWrap, eyeOpenSvg, eyeClosedSvg);
+
+  emailInput.addEventListener("input", () => showSingleAlert(alertBox, ""));
+  passInput.addEventListener("input", () => showSingleAlert(alertBox, ""));
+
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+
+    if (!email) {
+      showSingleAlert(alertBox, "Электронная почта не указана.");
+      emailInput.focus();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showSingleAlert(alertBox, "Электронная почта указана неверно.");
+      emailInput.focus();
+      return;
+    }
+    if (!password) {
+      showSingleAlert(alertBox, "Пароль не указан.");
+      passInput.focus();
+      return;
+    }
+    if (password.length < 8) {
+      showSingleAlert(alertBox, "Пароль должен быть не менее 8 символов.");
+      passInput.focus();
+      return;
+    }
+
+    showSingleAlert(alertBox, "");
+    sendBtn.textContent = "Отправка...";
+    sendBtn.disabled = true;
+
+    // Регистрация в Supabase (пароль хранится в Supabase Auth в хэшированном виде)
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+
+    // Важно: Supabase может не возвращать "email уже есть" (защита от перебора email).
+    // Поэтому UX делаем аккуратно: если нет явной ошибки — ведём на ввод кода.
+    if (error) {
+      console.error(error);
+      if (String(error.message || "").toLowerCase().includes("password")) {
+        showSingleAlert(alertBox, "Пароль не подходит. Попробуйте другой.");
+      } else {
+        showSingleAlert(alertBox, "Не удалось зарегистрироваться. Проверь данные.");
+      }
+      sendBtn.textContent = "Продолжить";
+      sendBtn.disabled = false;
+      return;
+    }
+
+    savePendingFlow({ flow: "register", email });
+
+    // После signUp Supabase отправит письмо подтверждения.
+    // Если ты сделал шаблон с {{ .Token }}, придёт 6-значный код.
+    window.location.href = "verify.html";
+  });
+});

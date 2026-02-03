@@ -1,0 +1,69 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const alertBox = document.getElementById("alertBox");
+  const emailInput = document.getElementById("emailInput");
+  const passInput = document.getElementById("passInput");
+  const sendBtn = document.getElementById("sendBtn");
+
+  const eyeWrap = document.getElementById("eye");
+  const eyeOpenSvg = document.getElementById("eyeOpen");
+  const eyeClosedSvg = document.getElementById("eyeClosed");
+
+  initPasswordEye(passInput, eyeWrap, eyeOpenSvg, eyeClosedSvg);
+
+  emailInput.addEventListener("input", () => showSingleAlert(alertBox, ""));
+  passInput.addEventListener("input", () => showSingleAlert(alertBox, ""));
+
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+
+    if (!email) {
+      showSingleAlert(alertBox, "Электронная почта не указана.");
+      emailInput.focus();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showSingleAlert(alertBox, "Электронная почта указана неверно.");
+      emailInput.focus();
+      return;
+    }
+    if (!password) {
+      showSingleAlert(alertBox, "Пароль не указан.");
+      passInput.focus();
+      return;
+    }
+
+    showSingleAlert(alertBox, "");
+    sendBtn.textContent = "Вход...";
+    sendBtn.disabled = true;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      console.error(error);
+
+      const msg = String(error.message || "").toLowerCase();
+      if (msg.includes("invalid login")) {
+        showSingleAlert(alertBox, "Неверная почта или пароль.");
+      } else if (msg.includes("email") && msg.includes("confirm")) {
+        showSingleAlert(alertBox, "Подтвердите почту. Введите код из письма.");
+        savePendingFlow({ flow: "register", email });
+        window.location.href = "verify.html";
+        return;
+      } else {
+        showSingleAlert(alertBox, "Не удалось войти. Попробуйте позже.");
+      }
+
+      sendBtn.textContent = "Продолжить";
+      sendBtn.disabled = false;
+      return;
+    }
+
+    window.location.href = "app.html";
+  });
+});

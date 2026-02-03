@@ -1,0 +1,182 @@
+// /js/reset.js
+// Сброс пароля: отправляем код на email (1 раз), затем проверяем код и задаём новый пароль.
+
+(function () {
+  const form = document.getElementById("resetForm");
+  const boxesWrap = document.getElementById("codeBoxes");
+  const displayEmail = document.getElementById("displayEmail");
+  const passInput = document.getElementById("resetPassInput");
+  const resetBtn = document.getElementById("resetBtn");
+  const back = document.getElementById("resetBack");
+
+  const eye = document.getElementById("resetEye");
+  const eyeOpen = document.getElementById("resetEyeOpen");
+  const eyeClosed = document.getElementById("resetEyeClosed");
+
+  if (!form || !boxesWrap) return;
+
+  const inputs = Array.from(boxesWrap.querySelectorAll("input"));
+  const email = (localStorage.getItem("auth_email") || "").trim();
+  const flow = "reset";
+
+  if (displayEmail) displayEmail.textContent = email;
+
+  function setFocus(idx) {
+    const el = inputs[idx];
+    if (el) el.focus();
+  }
+
+  function getCode() {
+    return inputs.map((i) => (i.value || "").trim()).join("");
+  }
+
+  function setEyeVisible(visible) {
+    if (!eye) return;
+    eye.style.display = visible ? "flex" : "none";
+  }
+
+  function setEyeState(isShown) {
+    if (!eyeOpen || !eyeClosed) return;
+    eyeOpen.style.display = isShown ? "block" : "none";
+    eyeClosed.style.display = isShown ? "none" : "block";
+  }
+
+  // UX: авто-переход между ячейками + вставка
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener("input", () => {
+      inp.value = inp.value.replace(/\D/g, "").slice(0, 1);
+      if (inp.value && idx < inputs.length - 1) setFocus(idx + 1);
+    });
+
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !inp.value && idx > 0) setFocus(idx - 1);
+    });
+
+    inp.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData.getData("text") || "")
+        .replace(/\D/g, "")
+        .slice(0, inputs.length);
+      if (!text) return;
+
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].value = text[i] || "";
+      }
+      setFocus(Math.min(text.length, inputs.length - 1));
+    });
+  });
+
+  // глаз появляется только если есть пароль
+  if (passInput) {
+    setEyeVisible(!!passInput.value);
+    passInput.addEventListener("input", () => {
+      setEyeVisible(!!passInput.value);
+      window.qored.hideAlert("alertBoxReset");
+    });
+  }
+
+  // переключение пароля
+  if (eye && passInput) {
+    let shown = false;
+    setEyeState(shown);
+
+    const toggle = () => {
+      if (!passInput.value) return;
+      shown = !shown;
+      passInput.type = shown ? "text" : "password";
+      setEyeState(shown);
+    };
+
+    eye.addEventListener("click", toggle);
+    eye.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") toggle();
+    });
+  }
+
+  // 1) Отправка кода при заходе (один раз)
+  async function sendOtpOnceOnEnter() {
+    if (!email) return;
+
+    const key = `${flow}:${email}`;
+    const sentFor = localStorage.getItem("auth_code_sent_for") || "";
+    const sentAt = parseInt(localStorage.getItem(`auth_code_sent_at_${flow}`) || "0", 10);
+    const now = Date.now();
+
+    const COOLDOWN_MS = 55 * 1000;
+    const isRecent = sentFor === key && sentAt && now - sentAt < COOLDOWN_MS;
+    if (isRecent) return;
+
+    try {
+      if (resetBtn) {
+        resetBtn.disabled = true;
+        resetBtn.textContent = "Отправляем код...";
+      }
+
+      await window.qored.sendCode(email, false);
+
+      localStorage.setItem("auth_code_sent_for", key);
+      localStorage.setItem(`auth_code_sent_at_${flow}`, String(Date.now()));
+
+      if (resetBtn) {
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Сменить пароль";
+      }
+    } catch (err) {
+      console.error(err);
+      window.qored.showAlert("alertBoxReset", err?.message || "Не удалось отправить код");
+
+      if (resetBtn) {
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Сменить пароль";
+      }
+    }
+  }
+
+  back && back.addEventListener("click", async () => {
+    // подчистим, чтобы при новом сбросе код мог уйти заново
+    localStorage.removeItem("auth_email");
+    localStorage.removeItem("auth_flow");
+    localStorage.removeItem("auth_code_sent_for");
+    localStorage.removeItem(`auth_code_sent_at_${flow}`);
+    try { await window.sb?.auth?.signOut?.(); } catch (e) {}
+    window.location.href = "login.html";
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    window.qored.hideAlert("alertBoxReset");
+
+    const code = getCode();
+    const newPass = passInput?.value || "";
+
+    if (!email) return window.qored.showAlert("alertBoxReset", "Email не найден. Начните заново.");
+    if (code.length !== inputs.length) return window.qored.showAlert("alertBoxReset", "Введите код полностью");
+    if (!newPass || newPass.length < 8) return window.qored.showAlert("alertBoxReset", "Пароль должен быть минимум 8 символов");
+
+    try {
+      resetBtn && (resetBtn.disabled = true);
+      resetBtn && (resetBtn.textContent = "Проверка...");
+
+      await window.qored.verifyCode(email, code);
+      await window.qored.updatePassword(newPass);
+
+      // безопасность: выходим и возвращаем на логин
+      try { await window.sb?.auth?.signOut?.(); } catch (e) {}
+
+      localStorage.removeItem("auth_email");
+      localStorage.removeItem("auth_flow");
+      localStorage.removeItem("auth_code_sent_for");
+      localStorage.removeItem(`auth_code_sent_at_${flow}`);
+
+      window.location.href = "login.html";
+    } catch (err) {
+      console.error(err);
+      window.qored.showAlert("alertBoxReset", err?.message || "Не удалось сменить пароль");
+      resetBtn && (resetBtn.disabled = false);
+      resetBtn && (resetBtn.textContent = "Сменить пароль");
+    }
+  });
+
+  setFocus(0);
+  sendOtpOnceOnEnter();
+})();

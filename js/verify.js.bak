@@ -1,0 +1,94 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const { flow, email } = getPendingFlow();
+
+  const emailEl = document.getElementById("displayEmail");
+  const backBtn = document.getElementById("backBtn");
+  const checkBtn = document.getElementById("checkBtn");
+
+  const codeWrap = document.getElementById("codeBoxes");
+  const inputs = Array.from(codeWrap.querySelectorAll("input"));
+
+  if (!email) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  emailEl.textContent = email;
+
+  function focusFirstEmpty() {
+    const empty = inputs.find(i => !i.value);
+    (empty || inputs[0]).focus();
+  }
+
+  inputs.forEach((input, idx) => {
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/\D/g, "").slice(0, 1);
+      if (input.value && idx < inputs.length - 1) {
+        inputs[idx + 1].focus();
+      }
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace") {
+        if (!input.value && idx > 0) {
+          inputs[idx - 1].focus();
+        }
+      }
+    });
+
+    input.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const digits = text.replace(/\D/g, "").slice(0, 6).split("");
+      digits.forEach((d, i) => {
+        if (inputs[i]) inputs[i].value = d;
+      });
+      focusFirstEmpty();
+    });
+  });
+
+  function getCode() {
+    return inputs.map(i => i.value).join("");
+  }
+
+  document.getElementById("verifyForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const entered = getCode();
+
+    if (entered.length < 6) {
+      alert("Введите 6 цифр кода");
+      focusFirstEmpty();
+      return;
+    }
+
+    checkBtn.textContent = "Проверка...";
+    checkBtn.disabled = true;
+
+    // Верификация OTP-кода (type: 'email') 3
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: email,
+      token: entered,
+      type: "email"
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Неверный или просроченный код");
+      checkBtn.textContent = "Проверить";
+      checkBtn.disabled = false;
+      inputs[0].focus();
+      return;
+    }
+
+    clearPendingFlow();
+    window.location.href = "app.html";
+  });
+
+  backBtn.addEventListener("click", () => {
+    if (flow === "register") window.location.href = "register.html";
+    else window.location.href = "login.html";
+  });
+
+  setTimeout(() => inputs[0].focus(), 150);
+});

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сброс пароля</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo-box">
+      <img src="Logo/plane.png" alt="Plane Logo" />
+    </div>
+
+    <h2>Сброс пароля</h2>
+
+    <p class="subtitle" id="resetSubtitle">
+      Введите электронную почту — мы отправим код для сброса пароля
+    </p>
+
+    <div class="alert" id="alertBoxResetRequest"></div>
+
+    <form id="resetRequestForm" novalidate>
+      <!-- Шаг 1: email -->
+      <div id="resetEmailStep">
+        <div class="field-label">Электронная почта</div>
+        <div class="field">
+          <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+        </div>
+          <input type="email" id="resetEmailInput" class="email-input" placeholder="example@gmail.com" autocomplete="email" />
+        </div>
+
+        <button type="submit" id="resetSendBtn">Отправить код</button>
+      </div>
+
+      <!-- Шаг 2: ввод кода (как на verify/register) -->
+      <div id="resetCodeStep" style="display:none;">
+        <div class="code-info" style="margin-top: 6px;">
+          Мы отправили код подтверждения на:<br>
+          <span class="email" id="displayEmail"></span><br><br>
+          Введите код ниже
+        </div>
+
+        <div class="code-boxes" id="codeBoxes">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 1">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 2">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 3">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 4">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 5">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 6">
+        </div>
+
+        <button type="submit" id="resetContinueBtn">Продолжить</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="bottom-text">
+        <button type="button" class="btn-secondary" id="resetBack">Назад</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/reset-request.js"></script>
+</body>
+</html>

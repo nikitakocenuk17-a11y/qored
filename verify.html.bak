@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Подтверждение</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo-box">
+      <img src="Logo/plane.png" alt="Plane Logo" />
+    </div>
+
+    <h2>Подтверждение</h2>
+
+    <div class="code-info">
+      Мы отправили код подтверждения на:<br>
+      <span class="email" id="displayEmail"></span><br><br>
+      Введите код ниже
+    </div>
+
+    <form id="verifyForm" novalidate>
+      <div class="code-boxes" id="codeBoxes">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 1">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 2">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 3">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 4">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 5">
+        <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 6">
+      </div>
+
+      <button type="submit" id="checkBtn">Проверить</button>
+      <button type="button" class="btn-secondary" id="backBtn">Назад</button>
+    </form>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/verify.js"></script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход через Email</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #121212;
+      color: #e0e0e0;
+      padding: 16px;
+    }
+
+    .container {
+      width: 380px;
+      max-width: 380px;
+      padding: 40px 30px;
+      background: rgba(30, 30, 30, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255,255,255,0.10);
+      text-align: center;
+    }
+
+    .logo-box {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 30px;
+      background: #29b6f6;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: none;
+      transform: none;
+      transition: none;
+    }
+
+    .logo-box:hover,
+    .logo-box:active {
+      transform: none;
+    }
+
+    .logo-box img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      display: block;
+      filter: none;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    p.subtitle {
+      color: rgba(255,255,255,0.65);
+      font-size: 15px;
+      margin-bottom: 18px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .alert {
+      display: none;
+      text-align: left;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 82, 82, 0.35);
+      background: rgba(255, 82, 82, 0.10);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      color: #ffd6d6;
+      margin: 0 0 14px 0;
+      animation: shakeIn 0.18s ease;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    @keyframes shakeIn {
+      from { transform: translateY(-6px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .field-label {
+      text-align: left;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      margin: 0 2px 8px;
+      letter-spacing: 0.2px;
+      font-weight: 700;
+    }
+
+    .field {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      margin-bottom: 14px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .field:focus-within {
+      border-color: rgba(41, 182, 246, 0.70);
+      box-shadow: 0 0 0 3px rgba(41, 182, 246, 0.16);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .field .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(41, 182, 246, 0.12);
+      border: 1px solid rgba(41, 182, 246, 0.18);
+      flex: 0 0 auto;
+    }
+
+    .field .icon svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.95;
+      fill: #29b6f6;
+    }
+
+    .field input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      font-size: 15px;
+      padding: 6px 0;
+      caret-color: #29b6f6;
+      -webkit-text-fill-color: #fff;
+    }
+
+    .email-input::placeholder {
+      color: #ffffff;
+      opacity: 0.62;
+    }
+
+    .pass-input::placeholder {
+      color: #a0a0a0;
+      opacity: 0.82;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-text-fill-color: #fff !important;
+      box-shadow: 0 0 0px 1000px rgba(20, 20, 20, 0.9) inset !important;
+      transition: background-color 9999s ease-in-out 0s;
+      caret-color: #29b6f6;
+    }
+
+    .eye {
+      width: 40px;
+      height: 40px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+      user-select: none;
+    }
+
+    .eye svg {
+      width: 20px;
+      height: 20px;
+      fill: rgba(255,255,255,0.75);
+      opacity: 0.95;
+      display: block;
+    }
+
+    .eye:hover svg {
+      opacity: 1;
+      fill: #ffffff;
+    }
+
+    .forgot {
+      text-align: right;
+      margin: -6px 2px 14px;
+      font-size: 13px;
+      color: #29b6f6;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #29b6f6;
+      color: #121212;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    button:hover {
+      background: #4fc3f7;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: none;
+    }
+
+    button:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.16);
+      color: rgba(255,255,255,0.75);
+      margin-top: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.14);
+      margin: 16px 0 12px;
+      border-radius: 999px;
+    }
+
+    .bottom-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.35;
+      user-select: none;
+    }
+
+    .bottom-text .linkish {
+      color: #29b6f6;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .code-info {
+      text-align: left;
+      margin: 0 0 14px 0;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.70);
+      font-size: 14px;
+    }
+
+    .code-info .email {
+      color: #fff;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .code-boxes {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin: 14px 0 14px;
+    }
+
+    .code-boxes input {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      caret-color: transparent;
+    }
+
+    .code-boxes input:focus {
+      border-color: rgba(41, 182, 246, 0.70);
+      box-shadow: 0 0 0 3px rgba(41, 182, 246, 0.16);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        width: 100%;
+        max-width: 420px;
+        padding: 28px 18px;
+        border-radius: 14px;
+      }
+
+      .logo-box {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 22px;
+      }
+
+      .logo-box img {
+        width: 30px;
+        height: 30px;
+      }
+
+      h2 {
+        font-size: 30px;
+      }
+
+      p.subtitle {
+        font-size: 16px;
+        margin-bottom: 16px;
+        line-height: 1.65;
+      }
+
+      .field input {
+        font-size: 16px;
+      }
+
+      .code-boxes {
+        gap: 8px;
+      }
+
+      .code-boxes input {
+        height: 50px;
+        border-radius: 14px;
+        font-size: 18px;
+      }
+
+      button, .btn-secondary {
+        padding: 14px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="logo-box">
+      <img src="Logo/plane.png" alt="Plane Logo" />
+    </div>
+
+    <!-- ОКНО: ВХОД -->
+    <div id="view-login" class="fade-in">
+      <h2>Вход</h2>
+
+      <p class="subtitle">
+        Добро пожаловать в Qored<br>
+        Регистрируй и пользуйся с удовольствием! Мы тебя ждём!
+      </p>
+
+      <div class="alert" id="alertBox"></div>
+
+      <form onsubmit="sendCode(event)" novalidate>
+        <div class="field-label">Электронная почта</div>
+        <div class="field">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </div>
+          <input type="email" id="emailInput" class="email-input" placeholder="example@gmail.com" autocomplete="email" />
+        </div>
+
+        <div class="field-label">Пароль</div>
+        <div class="field">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 0 1 6 0v3H9z"/>
+            </svg>
+          </div>
+
+          <input type="password" id="passInput" class="pass-input" placeholder="Введите пароль" minlength="8" autocomplete="current-password" />
+
+          <div class="eye" id="eye" onclick="togglePassword()" aria-label="Показать/скрыть пароль" role="button" tabindex="0">
+            <svg id="eyeOpen" viewBox="0 0 24 24">
+              <path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 9z"/>
+            </svg>
+            <svg id="eyeClosed" viewBox="0 0 24 24" style="display:none;">
+              <path d="M2 5.27 3.28 4 20 20.72 18.73 22l-3.06-3.06C14.61 19.63 13.35 20 12 20 5 20 2 13 2 13c.86-1.99 2.17-3.68 3.92-4.97L2 5.27zM12 6c7 0 10 7 10 7-.67 1.55-1.62 2.9-2.85 3.99l-1.44-1.44c.83-.72 1.51-1.58 2.04-2.55 0 0-2.76-5-7.75-5-1.02 0-1.96.21-2.81.56L7.73 7.12C8.97 6.42 10.4 6 12 6zM9.88 9.27l4.85 4.85A3.5 3.5 0 0 1 9.88 9.27zM8.45 10.8A3.5 3.5 0 0 0 13.2 15.55l-1.03-1.03a2.2 2.2 0 0 1-2.69-2.69L8.45 10.8z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="forgot">Забыли пароль?</div>
+
+        <button type="submit" id="sendBtn">Продолжить</button>
+
+        <div class="divider"></div>
+
+        <div class="bottom-text">
+          Нет еще аккаунта? <span class="linkish" onclick="openRegister()">Зарегиструйся</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- ОКНО: РЕГИСТРАЦИЯ -->
+    <div id="view-register" class="hidden">
+      <h2>Регистрация</h2>
+
+      <p class="subtitle">
+        Зарегиструйся в Qored, что бы быть на связи!
+      </p>
+
+      <div class="alert" id="alertBoxReg"></div>
+
+      <form onsubmit="sendCodeRegister(event)" novalidate>
+        <div class="field-label">Электронная почта</div>
+        <div class="field">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </div>
+          <input type="email" id="emailInputReg" class="email-input" placeholder="example@gmail.com" autocomplete="email" />
+        </div>
+
+        <div class="field-label">Пароль</div>
+        <div class="field">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 0 1 6 0v3H9z"/>
+            </svg>
+          </div>
+
+          <input type="password" id="passInputReg" class="pass-input" placeholder="Придумайте пароль (не менее 8 символов)" minlength="8" autocomplete="new-password" />
+
+          <div class="eye" id="eyeReg" onclick="togglePasswordReg()" aria-label="Показать/скрыть пароль" role="button" tabindex="0">
+            <svg id="eyeOpenReg" viewBox="0 0 24 24">
+              <path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 9z"/>
+            </svg>
+            <svg id="eyeClosedReg" viewBox="0 0 24 24" style="display:none;">
+              <path d="M2 5.27 3.28 4 20 20.72 18.73 22l-3.06-3.06C14.61 19.63 13.35 20 12 20 5 20 2 13 2 13c.86-1.99 2.17-3.68 3.92-4.97L2 5.27zM12 6c7 0 10 7 10 7-.67 1.55-1.62 2.9-2.85 3.99l-1.44-1.44c.83-.72 1.51-1.58 2.04-2.55 0 0-2.76-5-7.75-5-1.02 0-1.96.21-2.81.56L7.73 7.12C8.97 6.42 10.4 6 12 6zM9.88 9.27l4.85 4.85A3.5 3.5 0 0 1 9.88 9.27zM8.45 10.8A3.5 3.5 0 0 0 13.2 15.55l-1.03-1.03a2.2 2.2 0 0 1-2.69-2.69L8.45 10.8z"/>
+            </svg>
+          </div>
+        </div>
+
+        <button type="submit" id="sendBtnReg">Продолжить</button>
+
+        <div class="divider"></div>
+
+        <div class="bottom-text">
+          Уже есть аккаунт? <span class="linkish" onclick="openLogin()">Войти</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- ОКНО: ПОДТВЕРЖДЕНИЕ (общий для входа/регистрации) -->
+    <div id="view-code" class="hidden">
+      <h2>Подтверждение</h2>
+
+      <div class="code-info">
+        Мы отправили код подтверждения на:<br>
+        <span class="email" id="displayEmail"></span><br><br>
+        Введите код ниже
+      </div>
+
+      <form onsubmit="verifyCode(event)" novalidate>
+        <div class="code-boxes" id="codeBoxes">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 1">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 2">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 3">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 4">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 5">
+          <input type="text" inputmode="numeric" maxlength="1" pattern="\d*" aria-label="Код 6">
+        </div>
+
+        <button type="submit" id="checkBtn">Проверить</button>
+        <button type="button" class="btn-secondary" onclick="goBack()">Назад</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <script>
+    const EMAILJS_PUBLIC_KEY = "dZzCXb349brGeGuZN";
+    const EMAILJS_SERVICE_ID = "service_rlxs23t";
+    const EMAILJS_TEMPLATE_ID = "template_9tryaqq";
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    let generatedCode = null;
+    let flow = "login";
+    let pendingEmail = "";
+
+    const viewLogin = document.getElementById('view-login');
+    const viewRegister = document.getElementById('view-register');
+    const viewCode = document.getElementById('view-code');
+
+    const emailInput = document.getElementById('emailInput');
+    const passInput = document.getElementById('passInput');
+    const alertLogin = document.getElementById('alertBox');
+
+    const emailInputReg = document.getElementById('emailInputReg');
+    const passInputReg = document.getElementById('passInputReg');
+    const alertReg = document.getElementById('alertBoxReg');
+
+    const displayEmail = document.getElementById('displayEmail');
+
+    const eye = document.getElementById('eye');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    const eyeReg = document.getElementById('eyeReg');
+    const eyeOpenReg = document.getElementById('eyeOpenReg');
+    const eyeClosedReg = document.getElementById('eyeClosedReg');
+
+    const codeBoxesWrap = document.getElementById('codeBoxes');
+    const codeInputs = Array.from(codeBoxesWrap.querySelectorAll('input'));
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showSingleAlert(target, message) {
+      if (!message) {
+        target.style.display = "none";
+        target.textContent = "";
+        return;
+      }
+      target.textContent = message;
+      target.style.display = "block";
+    }
+
+    function hideAllViews() {
+      viewLogin.classList.add("hidden");
+      viewRegister.classList.add("hidden");
+      viewCode.classList.add("hidden");
+    }
+
+    function openRegister() {
+      hideAllViews();
+      viewRegister.classList.remove("hidden");
+      viewRegister.classList.add("fade-in");
+      showSingleAlert(alertLogin, "");
+      showSingleAlert(alertReg, "");
+      updateEyeVisibilityLogin();
+      updateEyeVisibilityReg();
+    }
+
+    function openLogin() {
+      hideAllViews();
+      viewLogin.classList.remove("hidden");
+      viewLogin.classList.add("fade-in");
+      showSingleAlert(alertLogin, "");
+      showSingleAlert(alertReg, "");
+      updateEyeVisibilityLogin();
+      updateEyeVisibilityReg();
+    }
+
+    function openCodeView(email) {
+      hideAllViews();
+      viewCode.classList.remove("hidden");
+      viewCode.classList.add("fade-in");
+      displayEmail.textContent = email;
+      codeInputs.forEach(i => i.value = "");
+      setTimeout(() => codeInputs[0].focus(), 150);
+    }
+
+    function goBack() {
+      if (flow === "register") openRegister();
+      else openLogin();
+    }
+
+    function togglePassword() {
+      const hidden = passInput.type === "password";
+      passInput.type = hidden ? "text" : "password";
+      eyeOpen.style.display = hidden ? "none" : "block";
+      eyeClosed.style.display = hidden ? "block" : "none";
+      passInput.focus();
+    }
+
+    function togglePasswordReg() {
+      const hidden = passInputReg.type === "password";
+      passInputReg.type = hidden ? "text" : "password";
+      eyeOpenReg.style.display = hidden ? "none" : "block";
+      eyeClosedReg.style.display = hidden ? "block" : "none";
+      passInputReg.focus();
+    }
+
+    function updateEyeVisibilityLogin() {
+      if ((passInput.value || "").length > 0) {
+        eye.style.display = "flex";
+      } else {
+        eye.style.display = "none";
+        passInput.type = "password";
+        eyeOpen.style.display = "block";
+        eyeClosed.style.display = "none";
+      }
+    }
+
+    function updateEyeVisibilityReg() {
+      if ((passInputReg.value || "").length > 0) {
+        eyeReg.style.display = "flex";
+      } else {
+        eyeReg.style.display = "none";
+        passInputReg.type = "password";
+        eyeOpenReg.style.display = "block";
+        eyeClosedReg.style.display = "none";
+      }
+    }
+
+    emailInput.addEventListener("input", () => showSingleAlert(alertLogin, ""));
+    passInput.addEventListener("input", () => { showSingleAlert(alertLogin, ""); updateEyeVisibilityLogin(); });
+
+    emailInputReg.addEventListener("input", () => showSingleAlert(alertReg, ""));
+    passInputReg.addEventListener("input", () => { showSingleAlert(alertReg, ""); updateEyeVisibilityReg(); });
+
+    updateEyeVisibilityLogin();
+    updateEyeVisibilityReg();
+
+    eye.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        togglePassword();
+      }
+    });
+
+    eyeReg.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        togglePasswordReg();
+      }
+    });
+
+    function sendCode(event) {
+      event.preventDefault();
+      flow = "login";
+
+      const email = emailInput.value.trim();
+      const pass = passInput.value;
+
+      const btn = document.getElementById('sendBtn');
+
+      if (!email) {
+        showSingleAlert(alertLogin, "Электронная почта не указана.");
+        emailInput.focus();
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showSingleAlert(alertLogin, "Электронная почта указана неверно.");
+        emailInput.focus();
+        return;
+      }
+      if (!pass) {
+        showSingleAlert(alertLogin, "Пароль не указан.");
+        passInput.focus();
+        return;
+      }
+      if (pass.length < 8) {
+        showSingleAlert(alertLogin, "Пароль должен быть не менее 8 символов.");
+        passInput.focus();
+        return;
+      }
+
+      showSingleAlert(alertLogin, "");
+
+      btn.textContent = "Отправка...";
+      btn.disabled = true;
+
+      generatedCode = Math.floor(100000 + Math.random() * 900000);
+      pendingEmail = email;
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email,
+        code: generatedCode
+      })
+      .then(() => {
+        btn.textContent = "Продолжить";
+        btn.disabled = false;
+        openCodeView(email);
+      })
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        showSingleAlert(alertLogin, "Не удалось отправить код. Проверь настройки EmailJS.");
+        btn.textContent = "Продолжить";
+        btn.disabled = false;
+      });
+    }
+
+    function sendCodeRegister(event) {
+      event.preventDefault();
+      flow = "register";
+
+      const email = emailInputReg.value.trim();
+      const pass = passInputReg.value;
+
+      const btn = document.getElementById('sendBtnReg');
+
+      if (!email) {
+        showSingleAlert(alertReg, "Электронная почта не указана.");
+        emailInputReg.focus();
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showSingleAlert(alertReg, "Электронная почта указана неверно.");
+        emailInputReg.focus();
+        return;
+      }
+      if (!pass) {
+        showSingleAlert(alertReg, "Пароль не указан.");
+        passInputReg.focus();
+        return;
+      }
+      if (pass.length < 8) {
+        showSingleAlert(alertReg, "Пароль должен быть не менее 8 символов.");
+        passInputReg.focus();
+        return;
+      }
+
+      showSingleAlert(alertReg, "");
+
+      btn.textContent = "Отправка...";
+      btn.disabled = true;
+
+      generatedCode = Math.floor(100000 + Math.random() * 900000);
+      pendingEmail = email;
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email,
+        code: generatedCode
+      })
+      .then(() => {
+        btn.textContent = "Продолжить";
+        btn.disabled = false;
+        openCodeView(email);
+      })
+      .catch((error) => {
+        console.error("EmailJS error:", error);
+        showSingleAlert(alertReg, "Не удалось отправить код. Проверь настройки EmailJS.");
+        btn.textContent = "Продолжить";
+        btn.disabled = false;
+      });
+    }
+
+    codeInputs.forEach((input, idx) => {
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "").slice(0, 1);
+        if (input.value && idx < codeInputs.length - 1) {
+          codeInputs[idx + 1].focus();
+        }
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace") {
+          if (!input.value && idx > 0) {
+            codeInputs[idx - 1].focus();
+          }
+        }
+      });
+
+      input.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData("text");
+        const digits = text.replace(/\D/g, "").slice(0, 6).split("");
+        digits.forEach((d, i) => {
+          if (codeInputs[i]) codeInputs[i].value = d;
+        });
+        const next = Math.min(digits.length, 5);
+        codeInputs[next].focus();
+      });
+    });
+
+    function getEnteredCode() {
+      return codeInputs.map(i => i.value).join("");
+    }
+
+    function verifyCode(event) {
+      event.preventDefault();
+
+      const code = getEnteredCode();
+
+      if (code.length < 6) {
+        alert("Введите 6 цифр кода");
+        codeInputs.find(i => !i.value)?.focus();
+        return;
+      }
+
+      if (code == String(generatedCode)) {
+        // УСПЕХ: вход/регистрация
+        // По твоей просьбе: никаких уведомлений "аккаунт создан"
+        // Просто делаем "успешно" и перезагрузка (или тут можно редирект на страницу)
+        setTimeout(() => {
+          location.reload();
+        }, 200);
+      } else {
+        alert("Неверный код");
+        codeInputs[0].focus();
+      }
+    }
+  </script>
+</body>
+</html>

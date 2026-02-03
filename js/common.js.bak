@@ -1,0 +1,20 @@
+// /js/common.js
+import { supabase } from "./supabaseClient.js";
+
+export async function sendEmailCode(email) {
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: true }
+  });
+  if (error) throw error;
+}
+
+export async function verifyEmailCode(email, code) {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: code,
+    type: "email"
+  });
+  if (error) throw error;
+  return data;
+}

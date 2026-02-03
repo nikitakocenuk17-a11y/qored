@@ -1,0 +1,425 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #121212;
+  color: #e0e0e0;
+  padding: 16px;
+}
+
+/* Окно: прозрачное (glass) */
+.container {
+  width: 380px;
+  max-width: 380px;
+  padding: 40px 30px;
+  background: rgba(30, 30, 30, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255,255,255,0.10);
+  text-align: center;
+}
+
+.logo-box {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 30px;
+  background: #29b6f6;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none;
+  transform: none;
+  transition: none;
+}
+
+.logo-box:hover,
+.logo-box:active {
+  transform: none;
+}
+
+.logo-box img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
+  filter: none;
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: 30px;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+p.subtitle {
+  color: rgba(255,255,255,0.65);
+  font-size: 15px;
+  margin-bottom: 18px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+/* Красная плашка */
+.alert {
+  display: none;
+  text-align: left;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 82, 82, 0.35);
+  background: rgba(255, 82, 82, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #ffd6d6;
+  margin: 0 0 14px 0;
+  animation: shakeIn 0.18s ease;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+@keyframes shakeIn {
+  from { transform: translateY(-6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Заголовки над полями */
+.field-label {
+  text-align: left;
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  margin: 0 2px 8px;
+  letter-spacing: 0.2px;
+  font-weight: 700;
+}
+
+/* Поля */
+.field {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  margin-bottom: 14px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.field:focus-within {
+  border-color: rgba(41, 182, 246, 0.70);
+  box-shadow: 0 0 0 3px rgba(41, 182, 246, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.field .icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(41, 182, 246, 0.12);
+  border: 1px solid rgba(41, 182, 246, 0.18);
+  flex: 0 0 auto;
+}
+
+.field .icon svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.95;
+  fill: #29b6f6;
+}
+
+.field input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+  padding: 6px 0;
+  caret-color: #29b6f6;
+  -webkit-text-fill-color: #fff;
+}
+
+/* Placeholder: email белый, пароль серый */
+.email-input::placeholder {
+  color: #ffffff;
+  opacity: 0.62;
+}
+
+.pass-input::placeholder {
+  color: #a0a0a0;
+  opacity: 0.82;
+}
+
+/* Убрать белый фон автозаполнения */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 0 0px 1000px rgba(20, 20, 20, 0.9) inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+  caret-color: #29b6f6;
+}
+
+/* Глазик */
+.eye {
+  width: 40px;
+  height: 40px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: 0 0 auto;
+  user-select: none;
+}
+
+.eye svg {
+  width: 20px;
+  height: 20px;
+  fill: rgba(255,255,255,0.75);
+  opacity: 0.95;
+  display: block;
+}
+
+.eye:hover svg {
+  opacity: 1;
+  fill: #ffffff;
+}
+
+/* "Забыли пароль?" справа */
+.forgot{
+  display: block;
+  width: fit-content;
+  margin: 6px 2px 14px auto;
+  padding: 0;
+  text-align: right;
+  cursor: pointer;
+  text-decoration: none;
+  color: #29b6f6;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* Кнопки */
+button {
+  width: 100%;
+  padding: 14px;
+  background: #29b6f6;
+  color: #121212;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+button:hover {
+  background: #4fc3f7;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: none;
+}
+
+button:disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.75);
+  margin-top: 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-color: rgba(255,255,255,0.22);
+}
+
+/* Разделитель */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.10);
+  margin: 16px 0 12px;
+  border-radius: 999px;
+}
+
+.bottom-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.35;
+  user-select: none;
+}
+
+.bottom-text .linkish {
+  color: #29b6f6;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Подтверждение */
+.code-info {
+  text-align: left;
+  margin: 0 0 14px 0;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.70);
+  font-size: 14px;
+}
+
+.code-info .email {
+  color: #fff;
+  font-weight: 800;
+  word-break: break-word;
+}
+
+/* Раздельные цифры */
+.code-boxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin: 14px 0 14px;
+}
+
+.code-boxes input {
+  width: 100%;
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  caret-color: transparent;
+}
+
+.code-boxes input:focus {
+  border-color: rgba(41, 182, 246, 0.70);
+  box-shadow: 0 0 0 3px rgba(41, 182, 246, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 420px) {
+  .container {
+    width: 100%;
+    max-width: 420px;
+    padding: 28px 18px;
+    border-radius: 14px;
+  }
+
+  .logo-box {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 22px;
+  }
+
+  .logo-box img {
+    width: 30px;
+    height: 30px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  p.subtitle {
+    font-size: 16px;
+    margin-bottom: 16px;
+    line-height: 1.65;
+  }
+
+  .field input {
+    font-size: 16px;
+  }
+
+  .code-boxes {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+
+  .code-boxes input {
+    height: 46px;
+    border-radius: 14px;
+    font-size: 18px;
+  }
+
+  button, .btn-secondary {
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-wrap {
+  position: relative;
+}
+
+
+.forgot:hover {
+  text-decoration: underline;
+}
+
+.forgot:hover{ text-decoration:none; }
