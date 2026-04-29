@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Riffy</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<style>
+/* ── TOKENS ── */
+:root[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #191919;
+  --bg4: #222222;
+  --glass: rgba(255,255,255,0.06);
+  --glass2: rgba(255,255,255,0.10);
+  --gborder: rgba(255,255,255,0.08);
+  --gborder2: rgba(255,255,255,0.16);
+  --text: #f5f5f5;
+  --text2: #888888;
+  --text3: #444444;
+  --accent: #ffffff;
+  --accent-dim: rgba(255,255,255,0.08);
+  --divider: rgba(255,255,255,0.05);
+  --inp: rgba(255,255,255,0.05);
+  --bubble-out: rgba(255,255,255,0.92);
+  --bubble-out-text: #0a0a0a;
+  --bubble-in: rgba(255,255,255,0.07);
+  --online: #4ade80;
+  --ios-glass: rgba(28,28,30,0.72);
+  --ios-glass-border: rgba(255,255,255,0.18);
+  --ios-glass-highlight: rgba(255,255,255,0.12);
+  --ios-sheet-bg: rgba(20,20,22,0.88);
+  --ios-separator: rgba(255,255,255,0.12);
+  --ios-text: #f5f5f5;
+  --ios-text-dim: #888888;
+  --ios-red: #ff453a;
+  --ios-blue: #0a84ff;
+  --ios-green: #32d74b;
+}
+:root[data-theme="light"] {
+  --bg: #f2f2f7;
+  --bg2: #ffffff;
+  --bg3: #ebebf0;
+  --bg4: #e0e0e8;
+  --glass: rgba(255,255,255,0.70);
+  --glass2: rgba(255,255,255,0.85);
+  --gborder: rgba(0,0,0,0.07);
+  --gborder2: rgba(0,0,0,0.14);
+  --text: #1a1a1a;
+  --text2: #666666;
+  --text3: #aaaaaa;
+  --accent: #000000;
+  --accent-dim: rgba(0,0,0,0.06);
+  --divider: rgba(0,0,0,0.05);
+  --inp: rgba(0,0,0,0.04);
+  --bubble-out: rgba(0,0,0,0.88);
+  --bubble-out-text: #ffffff;
+  --bubble-in: rgba(0,0,0,0.06);
+  --online: #22c55e;
+  --ios-glass: rgba(242,242,247,0.82);
+  --ios-glass-border: rgba(0,0,0,0.14);
+  --ios-glass-highlight: rgba(255,255,255,0.90);
+  --ios-sheet-bg: rgba(242,242,247,0.94);
+  --ios-separator: rgba(0,0,0,0.12);
+  --ios-text: #1a1a1a;
+  --ios-text-dim: #666666;
+  --ios-red: #ff3b30;
+  --ios-blue: #007aff;
+  --ios-green: #34c759;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+
+body {
+  font-family:'Manrope',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+/* ── LOGO SVG ── */
+.logo-mark {
+  display:flex;align-items:center;justify-content:center;
+  border-radius:14px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.logo-mark svg{display:block;}
+
+/* ── AUTH ── */
+#auth-screen {
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  height:100vh;position:relative;overflow:hidden;
+}
+.auth-orbs {
+  position:absolute;inset:0;pointer-events:none;
+  overflow:hidden;
+  will-change:transform;
+}
+.orb {
+  position:absolute;border-radius:50%;
+  filter:blur(80px);opacity:0.12;
+  animation:orbFloat 12s ease-in-out infinite;
+  will-change:transform;
+  transform:translateZ(0);
+}
+.orb1{width:500px;height:500px;background:#ffffff;top:-150px;left:-150px;animation-delay:0s;}
+.orb2{width:400px;height:400px;background:#888888;bottom:-100px;right:-100px;animation-delay:-4s;}
+.orb3{width:300px;height:300px;background:#ffffff;bottom:100px;left:100px;animation-delay:-8s;}
+@keyframes orbFloat{
+  0%,100%{transform:translate3d(0,0,0) scale(1);}
+  50%{transform:translate3d(20px,-15px,0) scale(1.04);}
+}
+[data-theme="light"] .orb{opacity:0.08;}
+
+
+
+/* Frosted glass card */
+.auth-card {
+  position:relative;z-index:1;
+  width:min(400px,calc(100vw - 28px));
+  background:var(--glass);
+  backdrop-filter:blur(36px) saturate(1.9);
+  -webkit-backdrop-filter:blur(36px) saturate(1.9);
+  border:1px solid var(--gborder2);
+  border-radius:28px;
+  padding:22px 22px 20px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.28),
+    0 1px 0 var(--ios-glass-highlight) inset;
+  animation:cardIn 0.35s cubic-bezier(0.34,1.1,0.64,1) both;
+  transform:translateZ(0);
+  will-change:transform,opacity;
+  overflow:hidden;
+  max-height:calc(100svh - 160px);
+  overflow-y:auto;
+}
+.auth-card::-webkit-scrollbar{width:0;}
+/* Liquid glass inner shine strip */
+.auth-card::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    var(--ios-glass-highlight) 30%,
+    rgba(255,255,255,0.22) 50%,
+    var(--ios-glass-highlight) 70%,
+    transparent 100%);
+  pointer-events:none;
+  border-radius:28px 28px 0 0;
+  z-index:1;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translate3d(0,20px,0) scale(0.97);}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+}
+
+
+/* ── iOS 26 LIQUID GLASS SEGMENT CONTROL ── */
+.auth-tabs {
+  display:flex;
+  background:var(--ios-glass);
+  backdrop-filter:blur(28px) saturate(2.2) brightness(1.06);
+  -webkit-backdrop-filter:blur(28px) saturate(2.2) brightness(1.06);
+  border-radius:14px;
+  padding:3px;
+  margin-bottom:20px;
+  border:1px solid var(--ios-glass-border);
+  position:relative;
+  transform:translateZ(0);
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.18),
+    0 1px 0 var(--ios-glass-highlight) inset;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  overflow:hidden;
+}
+/* top shine streak on segment control */
+.auth-tabs::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,
+    transparent 10%,
+    var(--ios-glass-highlight) 40%,
+    rgba(255,255,255,0.2) 50%,
+    var(--ios-glass-highlight) 60%,
+    transparent 90%);
+  pointer-events:none;z-index:2;
+}
+[data-theme="light"] .auth-tabs {
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(28px) saturate(2) brightness(1.04);
+  -webkit-backdrop-filter:blur(28px) saturate(2) brightness(1.04);
+  border:1px solid rgba(0,0,0,0.10);
+  box-shadow:0 4px 20px rgba(0,0,0,0.08),0 1px 0 rgba(255,255,255,0.9) inset;
+}
+/* draggable pill */
+.auth-tabs-slider {
+  position:absolute;
+  top:3px;bottom:3px;left:3px;
+  width:calc(50% - 3px);
+  background:var(--text);
+  border-radius:11px;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.22),
+    0 1px 0 rgba(255,255,255,0.15) inset;
+  pointer-events:none;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+  transition:transform 0.22s cubic-bezier(0.34,1.1,0.64,1),
+             box-shadow 0.15s;
+}
+.auth-tabs.dragging .auth-tabs-slider {
+  transition:none;
+  box-shadow:0 4px 18px rgba(0,0,0,0.32),0 1px 0 rgba(255,255,255,0.18) inset;
+}
+.auth-tabs.on-register .auth-tabs-slider {
+  transform:translate3d(100%,0,0);
+}
+.auth-tab {
+  flex:1;padding:9px 8px;
+  border:none;background:transparent;
+  font-family:'Manrope',sans-serif;
+  font-size:13px;font-weight:600;
+  color:var(--text2);cursor:pointer;
+  border-radius:11px;
+  position:relative;z-index:1;
+  transition:color 0.18s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:none;
+}
+.auth-tab.active { color:var(--bg); }
+
+/* Form switch — sequential transition, no overlap, no height bug */
+.auth-form-container {
+  position:relative;
+  overflow:hidden;
+}
+.auth-form-panel {
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+}
+.auth-form-panel.hidden-panel {
+  position:absolute;top:0;left:0;right:0;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transform:translate3d(0,10px,0);
+  transition:none;
+}
+.auth-form-panel.visible-panel {
+  position:relative;
+  pointer-events:auto;
+  opacity:1;
+  visibility:visible;
+  transform:translate3d(0,0,0);
+  transition:opacity 0.2s ease, transform 0.2s ease;
+}
+
+
+
+.form-group{margin-bottom:11px;}
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;}
+.form-input{
+  width:100%;padding:12px 14px;
+  background:var(--inp);
+  border:1px solid var(--gborder);
+  border-radius:12px;
+  font-family:'Manrope',sans-serif;
+  font-size:14px;color:var(--text);
+  outline:none;
+  transition:border-color 0.12s,box-shadow 0.12s;
+  transform:translateZ(0);
+}
+.form-input::placeholder{color:var(--text3);}
+.form-input:focus{
+  border-color:var(--gborder2);
+  box-shadow:0 0 0 3px rgba(255,255,255,0.05);
+}
+[data-theme="light"] .form-input:focus{
+  box-shadow:0 0 0 3px rgba(0,0,0,0.06);
+}
+
+/* iOS 26 Liquid Glass button */
+.btn-primary {
+  width:100%;padding:14px;
+  background:var(--text);
+  border:none;border-radius:14px;
+  font-family:'Manrope',sans-serif;
+  font-size:15px;font-weight:700;
+  color:var(--bg);cursor:pointer;
+  transition:transform 0.1s cubic-bezier(0.34,1,0.64,1),opacity 0.1s;
+  box-shadow:0 2px 16px rgba(0,0,0,0.2);
+  margin-top:6px;
+  position:relative;overflow:hidden;
+  -webkit-touch-callout:none;
+  transform:translateZ(0);
+  will-change:transform;
+}
+/* shine streak on button */
+.btn-primary::after {
+  content:'';
+  position:absolute;top:0;left:-60%;width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+  transform:skewX(-20deg);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.1s;
+}
+.btn-primary:active{transform:scale3d(0.97,0.97,1);opacity:0.88;}
+.btn-primary:active::after{opacity:1;}
+.btn-primary.pressing{transform:scale3d(0.96,0.96,1);}
+
+.auth-error{
+  font-size:13px;color:#f87171;
+  background:rgba(248,113,113,0.08);
+  border:1px solid rgba(248,113,113,0.2);
+  border-radius:10px;padding:9px 12px;
+  margin-bottom:14px;display:none;
+}
+.auth-error.show{display:block;animation:shake 0.25s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ── iOS 26 LIQUID GLASS CONTEXT MENU ── */
+#ios-context-menu {
+  display:none;
+  position:fixed;
+  z-index:99999;
+  animation:ctxIn 0.22s cubic-bezier(0.32,1,0.5,1) both;
+}
+#ios-context-menu.visible{display:block;}
+@keyframes ctxIn{
+  from{opacity:0;transform:scale(0.85);}
+  to{opacity:1;transform:scale(1);}
+}
+
+.ctx-glass {
+  background:var(--ios-glass);
+  backdrop-filter:blur(60px) saturate(2.2) brightness(1.1);
+  -webkit-backdrop-filter:blur(60px) saturate(2.2) brightness(1.1);
+  border:1px solid var(--ios-glass-border);
+  border-radius:18px;
+  min-width:240px;
+  overflow:hidden;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.4),
+    0 1px 0 var(--ios-glass-highlight) inset;
+}
+
+.ctx-header {
+  padding:14px 16px 10px;
+  border-bottom:1px solid var(--ios-separator);
+}
+.ctx-header-title {
+  font-size:12px;font-weight:700;
+  color:var(--ios-text-dim);
+  text-transform:uppercase;letter-spacing:0.6px;
+  margin-bottom:2px;
+}
+.ctx-header-sub {
+  font-size:11px;color:var(--ios-text-dim);
+}
+
+.ctx-item {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:background 0.1s;
+  border-bottom:1px solid var(--ios-separator);
+  position:relative;
+}
+.ctx-item:last-child{border-bottom:none;}
+.ctx-item:active{background:rgba(255,255,255,0.08);}
+[data-theme="light"] .ctx-item:active{background:rgba(0,0,0,0.05);}
+
+.ctx-item-left{display:flex;align-items:center;gap:12px;}
+.ctx-icon{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.ctx-icon.blue{background:rgba(10,132,255,0.18);}
+.ctx-icon.green{background:rgba(50,215,75,0.18);}
+.ctx-icon.red{background:rgba(255,69,58,0.18);}
+[data-theme="light"] .ctx-icon.blue{background:rgba(0,122,255,0.12);}
+[data-theme="light"] .ctx-icon.green{background:rgba(52,199,89,0.12);}
+[data-theme="light"] .ctx-icon.red{background:rgba(255,59,48,0.12);}
+
+.ctx-label{font-size:15px;font-weight:500;color:var(--ios-text);}
+.ctx-label.red{color:var(--ios-red);}
+.ctx-label.blue{color:var(--ios-blue);}
+.ctx-label.green{color:var(--ios-green);}
+
+/* ── APP SCREEN ── */
+#app-screen{
+  display:none;height:100vh;flex-direction:row;
+}
+#app-screen.visible{display:flex;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:300px;min-width:300px;
+  background:var(--bg2);
+  border-right:1px solid var(--divider);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+
+.sidebar-topbar{
+  padding:14px 14px 10px;
+  background:var(--glass);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--divider);
+  display:flex;align-items:center;gap:10px;
+}
+.sidebar-logo{
+  width:30px;height:30px;
+  background:var(--text);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.sidebar-brand{font-weight:800;font-size:16px;letter-spacing:-0.5px;color:var(--text);}
+.sidebar-actions{margin-left:auto;display:flex;gap:2px;}
+
+.icon-btn{
+  width:32px;height:32px;
+  background:transparent;border:none;
+  border-radius:8px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);font-size:16px;
+  transition:background 0.12s,color 0.12s;
+}
+.icon-btn:hover{background:var(--glass2);color:var(--text);}
+.icon-btn:active{background:var(--glass2);transform:scale(0.92);}
+
+.sidebar-search{
+  padding:8px 12px;
+  border-bottom:1px solid var(--divider);
+}
+.search-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--inp);
+  border:1px solid var(--gborder);
+  border-radius:10px;padding:7px 11px;
+  transition:border-color 0.15s;
+}
+.search-wrap:focus-within{border-color:var(--gborder2);}
+.search-icon{color:var(--text3);font-size:13px;flex-shrink:0;}
+.search-input{
+  flex:1;background:transparent;border:none;
+  font-family:'Manrope',sans-serif;
+  font-size:13px;color:var(--text);outline:none;
+}
+.search-input::placeholder{color:var(--text3);}
+
+.chats-list{flex:1;overflow-y:auto;padding:4px 0;}
+.chats-list::-webkit-scrollbar{width:0;}
+
+.chat-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;cursor:pointer;
+  border-radius:12px;margin:1px 6px;
+  transition:background 0.1s;
+  position:relative;
+}
+.chat-item:hover{background:var(--glass);}
+.chat-item.active{background:var(--glass2);}
+
+.chat-avatar{
+  width:44px;height:44px;border-radius:50%;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;color:#fff;
+  position:relative;
+}
+.avatar-dot{
+  position:absolute;bottom:1px;right:1px;
+  width:10px;height:10px;
+  background:var(--online);
+  border-radius:50%;
+  border:2px solid var(--bg2);
+}
+
+.chat-info{flex:1;min-width:0;}
+.chat-row{display:flex;justify-content:space-between;align-items:baseline;}
+.chat-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-time{font-size:10px;color:var(--text3);flex-shrink:0;margin-left:6px;}
+.chat-preview{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.chat-unread{
+  background:var(--text);color:var(--bg);
+  border-radius:10px;font-size:10px;font-weight:700;
+  padding:2px 6px;flex-shrink:0;
+}
+
+/* PROFILE MINI */
+.profile-mini{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;cursor:pointer;
+  border-top:1px solid var(--divider);
+}
+.profile-mini-avatar{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;
+}
+.profile-mini-info{flex:1;min-width:0;}
+.profile-mini-name{font-size:13px;font-weight:600;}
+.profile-mini-tag{font-size:11px;color:var(--text3);}
+
+/* BOTTOM NAV */
+.sidebar-nav{
+  padding:8px 8px;
+  padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  background:var(--glass);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  border-top:1px solid var(--divider);
+  display:flex;justify-content:space-around;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 14px;border-radius:12px;
+  cursor:pointer;transition:all 0.12s;
+  border:none;background:transparent;color:var(--text3);
+  font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;
+  position:relative;
+}
+.nav-item:hover{background:var(--glass2);color:var(--text2);}
+.nav-item.active{color:var(--text);}
+.nav-item.active .nav-icon{background:var(--accent-dim);}
+.nav-icon{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;transition:all 0.12s;
+}
+.nav-badge{
+  position:absolute;top:4px;right:10px;
+  width:7px;height:7px;background:var(--text);
+  border-radius:50%;border:2px solid var(--bg2);
+}
+
+/* ── CHAT AREA ── */
+.chat-area{
+  flex:1;display:flex;flex-direction:column;
+  background:var(--bg);position:relative;overflow:hidden;
+}
+
+.chat-header{
+  padding:11px 16px;
+  background:var(--glass);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--divider);
+  display:flex;align-items:center;gap:10px;
+  z-index:2;
+}
+.chat-header-avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;color:#fff;
+  flex-shrink:0;
+}
+.chat-header-info{flex:1;}
+.chat-header-name{font-weight:700;font-size:14px;}
+.chat-header-status{font-size:11px;color:var(--online);display:flex;align-items:center;gap:4px;}
+.status-dot{width:5px;height:5px;background:var(--online);border-radius:50%;}
+.chat-header-actions{display:flex;gap:2px;}
+
+/* MESSAGES */
+.messages-area{
+  flex:1;overflow-y:auto;
+  padding:14px 18px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.messages-area::-webkit-scrollbar{width:3px;}
+.messages-area::-webkit-scrollbar-thumb{background:var(--text3);border-radius:2px;}
+
+.date-divider{
+  text-align:center;margin:10px 0;
+  display:flex;align-items:center;gap:8px;
+}
+.date-divider::before,.date-divider::after{content:'';flex:1;height:1px;background:var(--divider);}
+.date-pill{
+  background:var(--glass);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--gborder);
+  border-radius:20px;padding:3px 10px;
+  font-size:10px;font-weight:600;color:var(--text2);
+  letter-spacing:0.3px;
+}
+
+.msg-wrap{
+  display:flex;align-items:flex-end;gap:6px;
+  max-width:66%;
+  animation:msgIn 0.18s cubic-bezier(0.32,1.1,0.64,1) both;
+}
+@keyframes msgIn{
+  from{opacity:0;transform:translateY(8px) scale(0.97);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+.msg-wrap.out{align-self:flex-end;flex-direction:row-reverse;}
+.msg-wrap.in{align-self:flex-start;}
+
+.msg-avatar-small{
+  width:24px;height:24px;border-radius:50%;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:#fff;
+  margin-bottom:2px;
+}
+
+.bubble{
+  padding:9px 13px;
+  border-radius:18px;
+  font-size:14px;line-height:1.5;
+  max-width:100%;position:relative;
+  word-break:break-word;
+}
+.msg-wrap.out .bubble{
+  background:var(--bubble-out);
+  color:var(--bubble-out-text);
+  border-bottom-right-radius:4px;
+}
+.msg-wrap.in .bubble{
+  background:var(--bubble-in);
+  color:var(--text);
+  border-bottom-left-radius:4px;
+  border:1px solid var(--gborder);
+}
+.bubble-time{
+  font-size:10px;margin-top:3px;
+  color:rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:flex-end;gap:3px;
+}
+.msg-wrap.out .bubble-time{color:rgba(0,0,0,0.35);}
+[data-theme="dark"] .msg-wrap.out .bubble-time{color:rgba(0,0,0,0.45);}
+.msg-wrap.in .bubble-time{color:var(--text3);}
+.check-icon{font-size:10px;}
+
+/* TYPING */
+.typing-bubble{
+  display:none;align-items:center;gap:6px;align-self:flex-start;
+  animation:msgIn 0.18s both;
+}
+.typing-bubble.show{display:flex;}
+.typing-dots{
+  background:var(--bubble-in);
+  border:1px solid var(--gborder);
+  border-radius:18px;border-bottom-left-radius:4px;
+  padding:11px 14px;display:flex;gap:4px;align-items:center;
+}
+.dot{
+  width:5px;height:5px;background:var(--text3);
+  border-radius:50%;animation:bounce 1s infinite;
+}
+.dot:nth-child(2){animation-delay:0.12s;}
+.dot:nth-child(3){animation-delay:0.24s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+/* INPUT BAR */
+.input-bar{
+  padding:8px 14px;
+  padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  background:var(--glass);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  border-top:1px solid var(--divider);
+  display:flex;align-items:flex-end;gap:8px;
+}
+.input-wrap{
+  flex:1;background:var(--inp);
+  border:1px solid var(--gborder);
+  border-radius:20px;padding:9px 14px;
+  display:flex;align-items:flex-end;gap:7px;
+  transition:border-color 0.15s;
+}
+.input-wrap:focus-within{border-color:var(--gborder2);}
+.msg-input{
+  flex:1;background:transparent;border:none;
+  font-family:'Manrope',sans-serif;
+  font-size:14px;color:var(--text);
+  outline:none;resize:none;
+  max-height:100px;overflow-y:auto;line-height:1.4;
+}
+.msg-input::placeholder{color:var(--text3);}
+.msg-input::-webkit-scrollbar{width:0;}
+.attach-btn{
+  background:transparent;border:none;
+  color:var(--text3);cursor:pointer;
+  font-size:17px;transition:color 0.12s;
+  padding:0;line-height:1;
+}
+.attach-btn:hover{color:var(--text);}
+.send-btn{
+  width:40px;height:40px;
+  background:var(--text);
+  border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--bg);font-size:16px;
+  flex-shrink:0;
+  transition:transform 0.12s,opacity 0.12s;
+}
+.send-btn:hover{transform:scale(1.06);}
+.send-btn:active{transform:scale(0.94);}
+
+/* EMPTY */
+.no-chat{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:12px;height:100%;color:var(--text3);
+}
+.empty-icon{
+  width:72px;height:72px;
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--gborder);
+  border-radius:22px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+}
+.empty-title{font-size:17px;font-weight:700;color:var(--text2);}
+
+/* REACTIONS */
+.reaction{
+  display:inline-flex;align-items:center;gap:3px;
+  background:var(--glass);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--gborder);
+  border-radius:10px;padding:2px 7px;
+  font-size:12px;cursor:pointer;
+  transition:all 0.12s;margin-top:3px;
+}
+.reaction:hover{border-color:var(--gborder2);background:var(--glass2);}
+.reaction-count{font-size:10px;color:var(--text2);font-weight:700;}
+.msg-reactions{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;}
+
+/* SLIDE UP */
+.slide-up{animation:slideUp 0.28s cubic-bezier(0.32,1,0.5,1) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* OVERLAY for context menu */
+#ctx-overlay{
+  display:none;position:fixed;inset:0;z-index:99998;
+}
+#ctx-overlay.visible{display:block;}
+
+/* MOBILE */
+@media(max-width:640px){
+  .sidebar{
+    position:fixed;inset:0;width:100%;z-index:100;
+    transform:translateX(0);
+    transition:transform 0.22s cubic-bezier(0.32,1,0.5,1);
+  }
+  .sidebar.hidden{transform:translateX(-100%);}
+  .chat-area{width:100%;}
+  #app-screen{position:relative;}
+  .back-btn{display:flex!important;}
+}
+/* ── AUTH BRAND ABOVE CARD ── */
+.auth-brand-above {
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  margin-bottom:14px;
+  animation:cardIn 0.3s cubic-bezier(0.34,1.1,0.64,1) both;
+  animation-delay:0.05s;
+  opacity:0;
+  animation-fill-mode:both;
+}
+.auth-brand-icon {
+  width:56px;height:56px;
+  background:var(--text);
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:
+    0 8px 28px rgba(0,0,0,0.28),
+    0 1px 0 rgba(255,255,255,0.15) inset;
+}
+[data-theme="light"] .auth-brand-icon {
+  box-shadow:0 8px 28px rgba(0,0,0,0.12),0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.auth-brand-name {
+  font-size:24px;font-weight:800;letter-spacing:-0.8px;color:var(--text);
+}
+
+/* card no longer needs top padding for logo */
+.auth-card { padding:24px 26px 22px; }
+
+/* label row with forgot link */
+.form-label-row {
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:6px;
+}
+.form-label-row .form-label { margin-bottom:0; }
+
+/* subtle link buttons */
+.auth-link-btn {
+  background:none;border:none;padding:0;cursor:pointer;
+  font-family:'Manrope',sans-serif;
+  font-size:11px;font-weight:600;
+  color:var(--text3);
+  letter-spacing:0.3px;
+  transition:color 0.12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.auth-link-btn:hover { color:var(--text2); }
+.auth-link-accent {
+  font-size:13px;font-weight:700;
+  color:var(--text2);
+}
+.auth-link-accent:hover { color:var(--text); }
+
+/* "нет аккаунта?" row */
+.auth-footer-link {
+  text-align:center;
+  font-size:13px;color:var(--text3);
+  margin-top:11px;
+}
+
+/* divider or */
+.auth-divider {
+  display:flex;align-items:center;gap:10px;
+  margin:11px 0 8px;
+}
+.auth-divider::before,.auth-divider::after {
+  content:'';flex:1;height:1px;background:var(--divider);
+}
+.auth-divider span {
+  font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;
+}
+
+/* ghost demo button */
+.btn-ghost {
+  width:100%;padding:12px;
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--gborder);
+  border-radius:14px;
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--text2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background 0.12s,border-color 0.12s,transform 0.1s;
+  transform:translateZ(0);
+}
+.btn-ghost:hover { background:var(--glass2);border-color:var(--gborder2);color:var(--text); }
+.btn-ghost:active { transform:scale3d(0.97,0.97,1); }
+.btn-ghost-icon { font-size:16px;line-height:1; }
+
+/* terms text */
+.auth-terms {
+  font-size:11px;color:var(--text3);
+  text-align:center;line-height:1.5;
+  margin-top:11px;
+}
+.auth-terms .auth-link-btn {
+  font-size:11px;text-decoration:underline;text-underline-offset:2px;
+  color:var(--text2) !important;
+}
+.auth-terms .auth-link-btn:hover { color:var(--text) !important; }
+
+/* ── NICKNAME SCREEN ── */
+#nickname-screen {
+  display:none;position:fixed;inset:0;z-index:9999998;
+  align-items:center;justify-content:center;
+  background:#0a0a0a;
+  padding:24px;
+}
+#nickname-screen.visible{display:flex;}
+.nickname-card {
+  width:min(380px,calc(100vw - 40px));
+  background:var(--glass);
+  backdrop-filter:blur(36px) saturate(1.9);
+  -webkit-backdrop-filter:blur(36px) saturate(1.9);
+  border:1px solid var(--gborder2);
+  border-radius:28px;
+  padding:32px 28px 28px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4),0 1px 0 var(--ios-glass-highlight) inset;
+  animation:cardIn 0.4s cubic-bezier(0.34,1.1,0.64,1) both;
+  text-align:center;
+}
+.nickname-card::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.18) 60%,transparent);
+  border-radius:28px 28px 0 0;pointer-events:none;
+}
+.nickname-card { position:relative; }
+.nickname-emoji { font-size:48px;margin-bottom:18px;line-height:1; }
+.nickname-title {
+  font-size:20px;font-weight:800;letter-spacing:-0.5px;
+  color:var(--text);margin-bottom:8px;
+}
+.nickname-sub {
+  font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px;
+}
+.nickname-input-wrap {
+  position:relative;margin-bottom:16px;
+}
+.nickname-input {
+  width:100%;padding:14px 16px;
+  background:var(--inp);
+  border:1.5px solid var(--gborder2);
+  border-radius:14px;
+  font-family:'Manrope',sans-serif;
+  font-size:15px;font-weight:600;color:var(--text);
+  outline:none;
+  transition:border-color 0.15s,box-shadow 0.15s;
+  text-align:left;
+}
+.nickname-input::placeholder{color:var(--text3);}
+.nickname-input:focus{
+  border-color:rgba(255,255,255,0.4);
+  box-shadow:0 0 0 3px rgba(255,255,255,0.07);
+}
+.btn-nickname-save {
+  width:100%;padding:14px;
+  background:var(--text);
+  border:none;border-radius:14px;
+  font-family:'Manrope',sans-serif;
+  font-size:15px;font-weight:700;
+  color:var(--bg);cursor:pointer;
+  transition:transform 0.1s,opacity 0.1s;
+  box-shadow:0 2px 16px rgba(0,0,0,0.2);
+  margin-bottom:10px;
+}
+.btn-nickname-save:active{transform:scale(0.97);opacity:0.88;}
+.btn-nickname-skip {
+  width:100%;padding:11px;
+  background:transparent;border:none;
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--text3);cursor:pointer;
+  transition:color 0.12s;
+  border-radius:12px;
+}
+.btn-nickname-skip:hover{color:var(--text2);}
+.nickname-status{font-size:12px;height:16px;margin-bottom:8px;transition:color 0.2s;text-align:left;}
+
+/* ── NICKNAME SUCCESS STATE ── */
+#nickname-success-overlay {
+  display:none;position:fixed;inset:0;z-index:9999999;
+  align-items:center;justify-content:center;
+  background:#0a0a0a;
+  padding:24px;
+}
+#nickname-success-overlay.visible{display:flex;}
+.nickname-success-card {
+  width:min(380px,calc(100vw - 40px));
+  background:var(--glass);
+  backdrop-filter:blur(36px) saturate(1.9);
+  -webkit-backdrop-filter:blur(36px) saturate(1.9);
+  border:1px solid var(--gborder2);
+  border-radius:28px;
+  padding:36px 28px 32px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4),0 1px 0 var(--ios-glass-highlight) inset;
+  animation:successCardIn 0.5s cubic-bezier(0.34,1.15,0.64,1) both;
+  text-align:center;
+  position:relative;
+}
+.nickname-success-card::before {
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.22) 50%,rgba(255,255,255,0.18) 60%,transparent);
+  border-radius:28px 28px 0 0;pointer-events:none;
+}
+@keyframes successCardIn {
+  from{opacity:0;transform:translate3d(0,24px,0) scale(0.95);}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1);}
+}
+#lottie-gotovo {
+  width:80px;height:80px;margin:0 auto 20px;
+}
+.success-title {
+  font-family:'Manrope',sans-serif;
+  font-size:26px;font-weight:800;
+  letter-spacing:-0.8px;
+  color:var(--text);
+  margin-bottom:10px;
+  line-height:1.15;
+}
+.success-sub {
+  font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:28px;
+}
+.success-new-name {
+  display:inline-block;
+  font-weight:800;
+  color:var(--text);
+  font-size:17px;
+  background:var(--accent-dim);
+  border-radius:10px;
+  padding:3px 10px;
+}
+.btn-success-done {
+  width:100%;padding:15px;
+  background:var(--text);
+  border:none;border-radius:14px;
+  font-family:'Manrope',sans-serif;
+  font-size:15px;font-weight:700;
+  color:var(--bg);cursor:pointer;
+  transition:transform 0.1s cubic-bezier(0.34,1,0.64,1),opacity 0.1s;
+  box-shadow:0 2px 18px rgba(0,0,0,0.22);
+}
+.btn-success-done:active{transform:scale(0.97);opacity:0.88;}
+
+  position:fixed;bottom:40px;left:50%;
+  transform:translate(-50%, 10px);
+  background:var(--ios-glass);
+  backdrop-filter:blur(24px) saturate(2);
+  -webkit-backdrop-filter:blur(24px) saturate(2);
+  border:1px solid var(--ios-glass-border);
+  border-radius:20px;
+  padding:10px 20px;
+  font-size:13px;font-weight:600;color:var(--ios-text);
+  box-shadow:0 8px 32px rgba(0,0,0,0.28);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.2s,transform 0.2s;
+  white-space:nowrap;
+  z-index:9999;
+}
+.auth-toast.show {
+  opacity:1;
+  transform:translate(-50%, 0);
+}
+.back-btn{display:none;width:32px;height:32px;background:transparent;border:none;border-radius:8px;cursor:pointer;align-items:center;justify-content:center;color:var(--text2);font-size:18px;transition:all 0.12s;}
+.back-btn:hover{background:var(--glass2);}
+
+/* ── LANGUAGE DIALOG ── */
+#lang-dialog-overlay {
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  z-index:9999998;align-items:center;justify-content:center;padding:24px;
+}
+#lang-dialog-overlay.visible{display:flex;}
+.lang-dialog {
+  background:rgba(28,28,32,0.92);
+  backdrop-filter:blur(40px) saturate(2);-webkit-backdrop-filter:blur(40px) saturate(2);
+  border:1px solid rgba(255,255,255,0.18);border-radius:24px;
+  width:min(320px,calc(100vw - 48px));padding:30px 24px 24px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.6),0 1px 0 rgba(255,255,255,0.12) inset;
+  animation:ldIn 0.36s cubic-bezier(0.34,1.1,0.64,1) both;
+}
+@keyframes ldIn{from{opacity:0;transform:scale(0.86) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.lang-dialog-icon{font-size:46px;margin-bottom:14px;line-height:1;}
+.lang-dialog-title{font-size:20px;font-weight:700;color:#f5f5f5;letter-spacing:-0.4px;margin-bottom:8px;}
+.lang-dialog-sub{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.55;margin-bottom:24px;}
+.lang-dialog-btns{display:flex;gap:10px;}
+.lang-btn{
+  flex:1;padding:14px 10px;border:none;border-radius:14px;
+  font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:transform 0.1s,opacity 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.lang-btn:active{transform:scale(0.95);}
+.lang-btn-yes{background:linear-gradient(135deg,#0A84FF 0%,#5E5CE6 100%);color:#fff;}
+.lang-btn-no{background:rgba(255,255,255,0.10);color:#f5f5f5;border:1px solid rgba(255,255,255,0.14);}
+
+/* ── HELLO SCREEN ── */
+#hello-screen{
+  display:none;position:fixed;inset:0;z-index:9999999;
+  align-items:center;justify-content:center;flex-direction:column;
+  overflow:hidden;background:#0b0f1a;
+}
+#hello-screen.visible{display:flex;}
+.hello-bg-orb{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:0;
+  transition:opacity 1.6s ease;pointer-events:none;
+}
+.hello-bg-orb.show{opacity:1;}
+.orb-a{width:65vmax;height:65vmax;top:-20%;left:-25%;background:radial-gradient(circle,rgba(15,45,105,0.95),transparent 60%);}
+.orb-b{width:55vmax;height:55vmax;top:30%;right:-20%;background:radial-gradient(circle,rgba(55,85,135,0.75),transparent 60%);}
+.orb-c{width:50vmax;height:50vmax;bottom:-15%;left:10%;background:radial-gradient(circle,rgba(25,65,125,0.7),transparent 60%);}
+
+.hello-center{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+
+/* Оба текста — одинаковый стиль, лежат в одном стеке */
+.hello-text-stack{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+}
+
+.hello-greeting,
+.hello-welcome{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(38px,9vw,80px);
+  font-weight:800;
+  letter-spacing:-2px;
+  line-height:1.1;
+  text-align:center;
+  background:linear-gradient(135deg,#ffffff 0%,rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hello-greeting{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.75s cubic-bezier(0.34,1.1,0.64,1), transform 0.75s cubic-bezier(0.34,1.1,0.64,1);
+  white-space:nowrap;
+}
+.hello-greeting.show{opacity:1;transform:translateY(0);}
+.hello-greeting.hide{
+  opacity:0;transform:translateY(-16px);
+  transition:opacity 0.45s ease, transform 0.45s ease;
+}
+
+.hello-welcome{
+  position:absolute;
+  font-size:clamp(38px,9vw,80px) !important;
+  font-weight:800 !important;
+  letter-spacing:-2px !important;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.75s cubic-bezier(0.34,1.1,0.64,1), transform 0.75s cubic-bezier(0.34,1.1,0.64,1);
+}
+.hello-welcome.show{opacity:1;transform:translateY(0);}
+
+.hello-brand{display:none;}
+.hello-brand.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ AUTH ══════════ -->
+<div id="auth-screen">
+  <div class="auth-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-tabs" id="auth-tabs-bar">
+      <div class="auth-tabs-slider"></div>
+      <button class="auth-tab active" onclick="switchTab('login')">Войти</button>
+      <button class="auth-tab" onclick="switchTab('register')">Регистрация</button>
+    </div>
+
+    <div id="auth-error" class="auth-error"></div>
+
+    <div class="auth-form-container">
+      <!-- LOGIN -->
+      <div id="login-form" class="auth-form-panel visible-panel">
+        <!-- Step 1: email -->
+        <div id="login-step1">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input id="login-email" class="form-input" type="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <button class="btn-primary" id="btn-login"
+            onmousedown="startPress(event,'login')" ontouchstart="startPress(event,'login')"
+            onmouseup="endPress(event,'login')" ontouchend="endPress(event,'login')"
+            onmouseleave="cancelPress()" ontouchcancel="cancelPress()"
+            onclick="doLoginSendOtp()">Получить код</button>
+          <div class="auth-footer-link">
+            Нет аккаунта? <button class="auth-link-btn auth-link-accent" onclick="switchTab('register')">Зарегистрироваться</button>
+          </div>
+        </div>
+        <!-- Step 2: OTP -->
+        <div id="login-step2" style="display:none;">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="width:56px;height:56px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:40px;line-height:1;">✉️</div>
+            <div style="font-size:15px;font-weight:600;color:var(--text);">Код отправлен на почту</div>
+            <div id="login-email-display" style="font-size:13px;color:var(--text2);margin-top:4px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Код из письма</label>
+            <input id="login-otp" class="form-input" type="text" inputmode="numeric" maxlength="6" placeholder="______" style="letter-spacing:8px;font-size:22px;text-align:center;font-family:'Space Mono',monospace;" autocomplete="one-time-code" oninput="handleOtpInput(this,'doLoginVerifyOtp')">
+          </div>
+          <button class="btn-primary" onclick="doLoginVerifyOtp()">Войти</button>
+          <div class="auth-footer-link">
+            <button class="auth-link-btn" onclick="backToLoginStep1()">← Изменить email</button>
+            &nbsp;·&nbsp;
+            <button class="auth-link-btn auth-link-accent" id="login-resend-btn" onclick="doLoginSendOtp(true)">Отправить снова</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="register-form" class="auth-form-panel hidden-panel">
+        <!-- Step 1: email + username -->
+        <div id="reg-step1">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input id="reg-email" class="form-input" type="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Имя пользователя</label>
+            <input id="reg-user" class="form-input" type="text" placeholder="ваш логин" autocomplete="username">
+            <div id="reg-user-status" style="font-size:12px;margin-top:4px;height:16px;transition:color 0.2s;"></div>
+          </div>
+          <button class="btn-primary" id="btn-register"
+            onmousedown="startPress(event,'register')" ontouchstart="startPress(event,'register')"
+            onmouseup="endPress(event,'register')" ontouchend="endPress(event,'register')"
+            onmouseleave="cancelPress()" ontouchcancel="cancelPress()"
+            onclick="doRegisterSendOtp()">Получить код</button>
+          <div class="auth-footer-link">
+            Уже есть аккаунт? <button class="auth-link-btn auth-link-accent" onclick="switchTab('login')">Войти</button>
+          </div>
+          <div class="auth-terms">
+            Регистрируясь, вы принимаете <button class="auth-link-btn" onclick="showLegalModal('terms')">условия использования</button> и <button class="auth-link-btn" onclick="showLegalModal('privacy')">политику конфиденциальности</button>
+          </div>
+        </div>
+        <!-- Step 2: OTP -->
+        <div id="reg-step2" style="display:none;">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="width:56px;height:56px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:40px;line-height:1;">✉️</div>
+            <div style="font-size:15px;font-weight:600;color:var(--text);">Код отправлен на почту</div>
+            <div id="reg-email-display" style="font-size:13px;color:var(--text2);margin-top:4px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Код из письма</label>
+            <input id="reg-otp" class="form-input" type="text" inputmode="numeric" maxlength="6" placeholder="______" style="letter-spacing:8px;font-size:22px;text-align:center;font-family:'Space Mono',monospace;" autocomplete="one-time-code" oninput="handleOtpInput(this,'doRegisterVerifyOtp')">
+          </div>
+          <button class="btn-primary" onclick="doRegisterVerifyOtp()">Подтвердить</button>
+          <div class="auth-footer-link">
+            <button class="auth-link-btn" onclick="backToRegStep1()">← Изменить email</button>
+            &nbsp;·&nbsp;
+            <button class="auth-link-btn auth-link-accent" id="reg-resend-btn" onclick="doRegisterSendOtp(true)">Отправить снова</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="auth-toast" class="auth-toast"></div>
+</div>
+
+<!-- ══════════ LANGUAGE DIALOG ══════════ -->
+<div id="lang-dialog-overlay">
+  <div class="lang-dialog">
+    <div class="lang-dialog-icon">🌐</div>
+    <div class="lang-dialog-title">Использовать русский?</div>
+    <div class="lang-dialog-sub">Хотите использовать Riffy<br>на русском языке?</div>
+    <div class="lang-dialog-btns">
+      <button class="lang-btn lang-btn-no"  onclick="chooseLang(false)">No</button>
+      <button class="lang-btn lang-btn-yes" onclick="chooseLang(true)">Да</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ HELLO SCREEN ══════════ -->
+<div id="hello-screen">
+  <div class="hello-bg-orb orb-a" id="orb-a"></div>
+  <div class="hello-bg-orb orb-b" id="orb-b"></div>
+  <div class="hello-bg-orb orb-c" id="orb-c"></div>
+  <div class="hello-center">
+    <div class="hello-text-stack">
+      <div class="hello-greeting" id="hello-greeting"></div>
+      <div class="hello-welcome"  id="hello-welcome"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ NICKNAME SCREEN ══════════ -->
+<div id="nickname-screen">
+  <div class="nickname-card">
+    <div class="nickname-emoji" style="font-size:unset;display:flex;align-items:center;justify-content:center;">
+<div id="lottie-pencil" style="width:40px;height:40px;filter:drop-shadow(0 4px 18px rgba(255,152,0,0.4));"></div>
+      <script>
+      (function(){
+        var lottieData = {"v":"5.4.4","fr":24,"ip":0,"op":28,"w":48,"h":48,"nm":"edit","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Pencil","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.333],"y":[0]},"t":3,"s":[0],"e":[-45]},{"i":{"x":[0.833],"y":[0.833]},"o":{"x":[0.167],"y":[0.167]},"t":8,"s":[-45],"e":[-88]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.167],"y":[0.167]},"t":14,"s":[-88],"e":[0]},{"t":23}],"ix":10},"p":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0.333},"t":3,"s":[5,43,0],"e":[5,43,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":6,"s":[5,43,0],"e":[25,40,0],"to":[0,0,0],"ti":[-6.667,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":11,"s":[25,40,0],"e":[45,43,0],"to":[6.667,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":14,"s":[45,43,0],"e":[5,43,0],"to":[0,0,0],"ti":[0,0,0]},{"t":23}],"ix":2},"a":{"a":0,"k":[-19,19,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-18.035,15.172],[-19,19],[-15.173,18.035]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.215686276555,0.278431385756,0.309803932905,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-17.095,11.43],[-19,19],[-11.429,17.094]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.75686275959,0.027450980619,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":3,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[8.363,-14.032],[11.194,-16.866],[16.862,-11.202],[14.031,-8.368]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.179,-6.848],[4.01,-9.682],[9.678,-4.018],[6.847,-1.184]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.179,-6.848],[4.01,-9.682],[9.678,-4.018],[6.847,-1.184]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.179,-6.848],[4.01,-9.682],[9.678,-4.018],[6.847,-1.184]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.179,-6.848],[4.01,-9.682],[9.678,-4.018],[6.847,-1.184]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[8.363,-14.032],[11.194,-16.866],[16.862,-11.202],[14.031,-8.368]],"c":true}]},{"t":23}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.690196096897,0.745098054409,0.772549033165,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":3,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[14.032,-8.368],[-11.428,17.093],[-17.093,11.428],[8.368,-14.033]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[6.848,-1.184],[-11.428,17.093],[-17.093,11.428],[1.184,-6.849]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[6.848,-1.184],[-11.428,17.093],[-17.093,11.428],[1.184,-6.849]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[6.848,-1.184],[-11.428,17.093],[-17.093,11.428],[1.184,-6.849]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":18,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[6.848,-1.184],[-11.428,17.093],[-17.093,11.428],[1.184,-6.849]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[14.032,-8.368],[-11.428,17.093],[-17.093,11.428],[8.368,-14.033]],"c":true}]},{"t":23}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.596078455448,0,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 4","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":3,"s":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[18.583,-14.933],[14.932,-18.583],[12.917,-18.583],[11.199,-16.863],[16.863,-11.199],[18.583,-12.917],[18.583,-14.933]],"c":false}],"e":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[11.399,-7.749],[7.748,-11.399],[5.733,-11.399],[4.015,-9.679],[9.679,-4.015],[11.399,-5.733],[11.399,-7.749]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[11.399,-7.749],[7.748,-11.399],[5.733,-11.399],[4.015,-9.679],[9.679,-4.015],[11.399,-5.733],[11.399,-7.749]],"c":false}],"e":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[11.399,-7.749],[7.748,-11.399],[5.733,-11.399],[4.015,-9.679],[9.679,-4.015],[11.399,-5.733],[11.399,-7.749]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":18,"s":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[11.399,-7.749],[7.748,-11.399],[5.733,-11.399],[4.015,-9.679],[9.679,-4.015],[11.399,-5.733],[11.399,-7.749]],"c":false}],"e":[{"i":[[0,0],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0],[0.556,0.558]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557],[0,0]],"v":[[18.583,-14.933],[14.932,-18.583],[12.917,-18.583],[11.199,-16.863],[16.863,-11.199],[18.583,-12.917],[18.583,-14.933]],"c":false}]},{"t":23}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.898039221764,0.450980395079,0.450980395079,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 5","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false}],"ip":-2,"op":28,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Mask on line","td":1,"sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":14,"s":[24,24,0],"e":[-14,24,0],"to":[0,0,0],"ti":[0,0,0]},{"t":23}],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[8,12],[12,12],[20,20],[8,20]],"c":true},"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.898039221764,0.450980395079,0.450980395079,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":28,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"Line","tt":2,"sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":22,"s":[100],"e":[0]},{"t":25}],"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[24,41,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":14,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[19,2],[16.906,2],[18.906,-2],[19,-2]],"c":true}],"e":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[19,2],[-19,2],[-17,-2],[19,-2]],"c":true}]},{"t":23}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.690196096897,0.745098054409,0.772549033165,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":16,"op":28,"st":0,"bm":0}],"markers":[]};
+        function waitLottie(){
+          if(window.lottie){
+            var anim = lottie.loadAnimation({
+              container: document.getElementById('lottie-pencil'),
+              renderer: 'svg',
+              loop: true,
+              autoplay: true,
+              animationData: lottieData
+            });
+            anim.setSpeed(0.45);
+          } else {
+            setTimeout(waitLottie, 50);
+          }
+        }
+        waitLottie();
+      })();
+      </script>
+    </div>
+    <div class="nickname-title">Как вас зовут?</div>
+    <div class="nickname-sub">Это имя будут видеть другие.<br>Найти вас смогут по вашему @логину из регистрации.</div>
+    <div class="nickname-input-wrap">
+      <input id="nickname-input" class="nickname-input" type="text" placeholder="Например, Алексей" autocomplete="off" oninput="onNicknameInput(this)">
+    </div>
+    <div id="nickname-status" class="nickname-status"></div>
+    <button class="btn-nickname-save" onclick="saveNickname()">Сохранить</button>
+    <button class="btn-nickname-skip" onclick="skipNickname()">Пропустить</button>
+  </div>
+</div>
+
+<!-- ══════════ NICKNAME SUCCESS OVERLAY ══════════ -->
+<div id="nickname-success-overlay">
+  <div class="nickname-success-card">
+    <div id="lottie-gotovo"></div>
+    <div class="success-title">Готово!</div>
+    <div class="success-sub">Мы изменили ваш никнейм на<br><span class="success-new-name" id="success-name-display"></span></div>
+    <button class="btn-success-done" onclick="finishNicknameSuccess()">Готово</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var gotovData = {"v":"5.6.5","fr":24,"ip":0,"op":28,"w":48,"h":48,"nm":"edit-ok","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"Pencil 2","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.3],"y":[1]},"o":{"x":[0.2],"y":[0]},"t":20,"s":[-90]},{"t":25,"s":[0]}],"ix":10},"p":{"a":0,"k":[24.069,23.93,0],"ix":2},"a":{"a":0,"k":[19.32,19.319,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":20,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[20.977,-17.616],[-14.816,17.441],[-17.613,14.586],[18.185,-20.461]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":22,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[20.106,-14.198],[-11.275,16.206],[-16.43,11.04],[14.441,-19.863]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":23,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[17.506,-12.102],[-9.965,15.384],[-15.29,10.052],[11.841,-17.767]],"c":true}]},{"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[15.563,-9.898],[-9.898,15.563],[-15.563,9.899],[9.898,-15.563]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":20,"s":[0.262745112181,0.627451002598,0.278431385756,1]},{"t":22,"s":[1,0.596000043084,0,1]}],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[17.72,20.919],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 4","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":20,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.97,-0.927],[0.552,0.023],[0.781,1.795]],"c":true}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":22,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[1.428,-3.889],[2.011,-2.265],[3.766,-1.527]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":23,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[0.131,-2.842],[-0.114,0.056],[2.821,-0.16]],"c":true}]},{"t":24,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-0.949,-1.914],[-1.913,1.914],[1.913,0.949]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.216000007181,0.277999997606,0.310000011968,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[2.163,36.475],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.857},"o":{"x":0.333,"y":0},"t":20,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-3.723,0.928],[-1.382,1.988],[-1.077,3.633]],"c":true}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.143},"t":22,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-0.828,-4.022],[0.585,-0.816],[3.805,0.748]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":23,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.576,-3.662],[-1.902,1.797],[3.787,1.621]],"c":true}]},{"t":24,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.88,-3.785],[-3.786,3.785],[3.786,1.879]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.757000014361,0.027000000898,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[4.035,34.604],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":20,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[4.173,-5.191],[3.966,-4.908],[5.262,-3.025],[5.446,-3.199]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":21,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.591,-3.495],[2.134,-3.998],[4.288,-1.873],[3.744,-1.305]],"c":true}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":22,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-1.85,-1.673],[-0.556,-2.962],[3.369,1.152],[2.098,2.462]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":23,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-2.303,-3.617],[-0.934,-4.903],[4.734,0.761],[2.978,2.413]],"c":true}]},{"t":24,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-4.25,-1.415],[-1.418,-4.249],[4.25,1.415],[1.418,4.249]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.689999988032,0.745000023935,0.773000021542,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[31.862,6.772],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":20,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[2.669,-1.934],[2.393,-2.241],[1.429,-2.553],[1.258,-2.392],[2.691,-0.415],[3.02,-0.731]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":21,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[1.522,-0.675],[0.771,-1.476],[-1.257,-1.294],[-1.278,-1.28],[1.499,1.353],[1.522,1.341]],"c":true}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":22,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[1.123,1.339],[-0.752,-0.751],[-2.767,-0.751],[-3.119,-0.395],[0.813,3.707],[1.123,3.355]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":23,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[2.778,0.731],[-0.873,-2.919],[-2.888,-2.919],[-3.486,-2.348],[2.178,3.316],[2.778,2.747]],"c":true}]},{"t":24,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[3.414,0.236],[-0.237,-3.414],[-2.252,-3.414],[-3.97,-1.694],[1.694,3.97],[3.414,2.252]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.898000021542,0.451000019148,0.451000019148,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[34.419,4.22],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 5","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false}],"ip":20,"op":28,"st":20,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"Checkmark ","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[24,26,0],"ix":2},"a":{"a":0,"k":[29,23,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":8,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-17.875,-20.25],[0.063,-2.063],[18.563,16.125]],"c":false}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.167,"y":0.167},"t":11,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-19,1],[-7,13],[19,-13]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":17,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-19,1],[-7,13],[19,-13]],"c":false}]},{"t":20,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-17.375,-20.063],[-0.762,-3.163],[17.688,15.75]],"c":false}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[0.262745098039,0.627450980392,0.278431372549,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":4,"ix":5},"lc":1,"lj":1,"ml":10,"bm":0,"nm":"Stroke 1","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[29,23],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":8,"op":20,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"Pencil ","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":3,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.403],"y":[0]},"t":4,"s":[5]},{"t":8,"s":[-90]}],"ix":10},"p":{"a":0,"k":[24.069,23.93,0],"ix":2},"a":{"a":0,"k":[19.32,19.319,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":4,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[15.563,-9.898],[-9.898,15.563],[-15.563,9.899],[9.898,-15.563]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":5,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[17.506,-12.102],[-9.965,15.384],[-15.29,10.052],[11.841,-17.767]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[20.106,-14.198],[-11.275,16.206],[-16.43,11.04],[14.441,-19.863]],"c":true}]},{"t":8,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[21.236,-18.172],[-15.188,18.269],[-17.997,15.461],[18.435,-20.983]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":6,"s":[1,0.596000043084,0,1]},{"t":8,"s":[0.262745112181,0.627451002598,0.278431385756,1]}],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[17.72,20.919],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 4","np":2,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":4,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-0.949,-1.914],[-1.913,1.914],[1.913,0.949]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":5,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[0.131,-2.842],[-0.114,0.056],[2.821,-0.16]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[1.428,-3.889],[2.011,-2.265],[3.766,-1.527]],"c":true}]},{"t":8,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.964,-0.152],[0.165,0.211],[0.394,1.982]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.216000007181,0.277999997606,0.310000011968,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[2.163,36.475],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 1","np":2,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":4,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.88,-3.785],[-3.786,3.785],[3.786,1.879]],"c":true}]},{"i":{"x":0.833,"y":0.857},"o":{"x":0.167,"y":0.167},"t":5,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-1.576,-3.662],[-1.902,1.797],[3.787,1.621]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.143},"t":6,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-0.828,-4.022],[0.585,-0.816],[3.805,0.748]],"c":true}]},{"t":8,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-3.716,1.703],[-1.77,2.176],[-1.464,3.82]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.757000014361,0.027000000898,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[4.035,34.604],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 2","np":2,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":4,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-4.25,-1.415],[-1.418,-4.249],[4.25,1.415],[1.418,4.249]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":5,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-2.303,-3.617],[-0.934,-4.903],[4.734,0.761],[2.978,2.413]],"c":true}]},{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[-1.85,-1.673],[-0.556,-2.962],[3.369,1.152],[2.098,2.462]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":7,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[1.591,-3.495],[2.134,-3.998],[4.288,-1.873],[3.744,-1.305]],"c":true}]},{"t":8,"s":[{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[3.898,-5.841],[3.691,-5.558],[5.375,-3.612],[5.559,-3.786]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.689999988032,0.745000023935,0.773000021542,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[31.862,6.772],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 3","np":2,"cix":2,"bm":0,"ix":4,"mn":"ADBE Vector Group","hd":false},{"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.833,"y":0.833},"o":{"x":0.333,"y":0},"t":4,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[3.414,0.236],[-0.237,-3.414],[-2.252,-3.414],[-3.97,-1.694],[1.694,3.97],[3.414,2.252]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.167,"y":0.167},"t":5,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[2.778,0.731],[-0.873,-2.919],[-2.888,-2.919],[-3.486,-2.348],[2.178,3.316],[2.778,2.747]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":6,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[1.123,1.339],[-0.752,-0.751],[-2.767,-0.751],[-3.119,-0.395],[0.813,3.707],[1.123,3.355]],"c":true}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":7,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[1.522,-0.675],[0.771,-1.476],[-1.257,-1.294],[-1.278,-1.28],[1.499,1.353],[1.522,1.341]],"c":true}]},{"t":8,"s":[{"i":[[0.556,0.558],[0,0],[0.556,-0.556],[0,0],[0,0],[0,0]],"o":[[0,0],[-0.555,-0.556],[0,0],[0,0],[0,0],[0.556,-0.557]],"v":[[2.781,-2.522],[2.505,-2.828],[1.154,-3.203],[0.983,-3.042],[2.803,-1.003],[3.133,-1.318]],"c":true}]}],"ix":2},"nm":"Path 1","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.898000021542,0.451000019148,0.451000019148,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill 1","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[34.419,4.22],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"Group 5","np":2,"cix":2,"bm":0,"ix":5,"mn":"ADBE Vector Group","hd":false}],"ip":0,"op":8,"st":0,"bm":0}],"markers":[]};
+  var _gotovAnim = null;
+  window._initGotovLottie = function() {
+    var el = document.getElementById('lottie-gotovo');
+    if (!el) return;
+    if (_gotovAnim) { _gotovAnim.destroy(); _gotovAnim = null; }
+    el.innerHTML = '';
+    function tryLoad() {
+      if (window.lottie) {
+        _gotovAnim = lottie.loadAnimation({
+          container: el,
+          renderer: 'svg',
+          loop: false,
+          autoplay: true,
+          animationData: gotovData
+        });
+        _gotovAnim.setSpeed(0.5);
+      } else { setTimeout(tryLoad, 50); }
+    }
+    tryLoad();
+  };
+  window.finishNicknameSuccess = function() {
+    var ov = document.getElementById('nickname-success-overlay');
+    ov.style.transition = 'opacity 0.35s ease';
+    ov.style.opacity = '0';
+    setTimeout(function() {
+      ov.classList.remove('visible');
+      ov.removeAttribute('style');
+      if (_gotovAnim) { _gotovAnim.destroy(); _gotovAnim = null; }
+      enterApp();
+    }, 360);
+  };
+})();
+</script>
+
+<div id="ctx-overlay" onclick="hideContextMenu()"></div>
+<div id="ios-context-menu">
+  <div class="ctx-glass" id="ctx-content"></div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app-screen">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-topbar">
+      <div class="sidebar-logo logo-mark">
+        <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
+          <path d="M6 7C6 5.343 7.343 4 9 4H19C20.657 4 22 5.343 22 7V17L18 14H9C7.343 14 6 12.657 6 11V7Z" fill="var(--bg)"/>
+          <circle cx="10" cy="9" r="1.5" fill="var(--bg)"/>
+          <circle cx="14" cy="9" r="1.5" fill="var(--bg)"/>
+          <circle cx="18" cy="9" r="1.5" fill="var(--bg)"/>
+        </svg>
+      </div>
+      <div class="sidebar-brand">Riffy</div>
+      <div class="sidebar-actions">
+        <button class="icon-btn" title="Новый чат">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+            <path fill="#e57373" d="M42.6,9.1l-3.7-3.7c-0.6-0.6-1.5-0.6-2,0l-1.7,1.7l5.7,5.7l1.7-1.7C43.1,10.5,43.1,9.6,42.6,9.1"/>
+            <path fill="#ff9800" d="M38,15.6L12.6,41.1l-5.7-5.7L32.4,10L38,15.6z"/>
+            <path fill="#b0bec5" d="M32.4,10l2.8-2.8l5.7,5.7L38,15.6L32.4,10z"/>
+            <path fill="#ffc107" d="M6.9,35.4L5,43l7.6-1.9L6.9,35.4z"/>
+            <path fill="#37474f" d="M6,39.2L5,43l3.8-1L6,39.2z"/>
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="doLogout()" title="Выйти">🚪</button>
+      </div>
+    </div>
+
+    <div class="sidebar-search">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" placeholder="Поиск..." oninput="filterChats(this.value)">
+      </div>
+    </div>
+
+    <div class="chats-list" id="chats-list"></div>
+
+    <div class="profile-mini" id="profile-mini">
+      <div class="profile-mini-avatar" id="pm-avatar"></div>
+      <div class="profile-mini-info">
+        <div class="profile-mini-name" id="pm-name"></div>
+        <div class="profile-mini-tag" id="pm-tag"></div>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Тема" id="theme-btn-app">🌙</button>
+    </div>
+
+    <div class="sidebar-nav">
+      <button class="nav-item active" onclick="setNav(this,'chats')">
+        <div class="nav-icon">💬</div>
+        <span>Чаты</span>
+        <div class="nav-badge"></div>
+      </button>
+      <button class="nav-item" onclick="setNav(this,'calls')">
+        <div class="nav-icon">📞</div>
+        <span>Звонки</span>
+      </button>
+      <button class="nav-item" onclick="setNav(this,'contacts')">
+        <div class="nav-icon">👥</div>
+        <span>Контакты</span>
+      </button>
+      <button class="nav-item" onclick="setNav(this,'settings')">
+        <div class="nav-icon">⚙️</div>
+        <span>Настройки</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT AREA -->
+  <div class="chat-area" id="chat-area">
+    <div class="no-chat">
+      <div class="empty-icon">💬</div>
+      <div class="empty-title">Выберите чат</div>
+      <div style="font-size:13px;color:var(--text3);text-align:center;max-width:220px;line-height:1.5;margin-top:4px;">
+        Выберите диалог слева или начните новый
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://dcbansppywzrtdragkpa.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_kOi6QdmK_XOvWBvUr0As1A_9bxbmsJG';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(SUPABASE_URL + path, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + (supabaseSession?.access_token || SUPABASE_KEY),
+      ...(options.headers || {}),
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data };
+}
+
+let supabaseSession = JSON.parse(localStorage.getItem('riffy_session') || 'null');
+
+// ── DATA ──
+let currentUser = JSON.parse(localStorage.getItem('riffy_current') || 'null');
+
+const AVATARS = [
+  'linear-gradient(135deg,#1a1a2e,#16213e)',
+  'linear-gradient(135deg,#2d1b69,#11998e)',
+  'linear-gradient(135deg,#373b44,#4286f4)',
+  'linear-gradient(135deg,#0f0c29,#302b63)',
+  'linear-gradient(135deg,#1a1a1a,#555)',
+  'linear-gradient(135deg,#2c3e50,#4ca1af)',
+];
+const avatarFor = s => AVATARS[Math.abs(s.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % AVATARS.length];
+const initials = n => n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+const DEMO_CHATS = [
+  {id:'c1',name:'Алексей Н.',online:true,messages:[
+    {id:1,out:false,text:'Привет! Как дела?',time:'10:02'},
+    {id:2,out:true,text:'Всё отлично, спасибо! 🔥',time:'10:03'},
+    {id:3,out:false,text:'Ты уже видел новый дизайн Riffy? Это просто огонь 🤩',time:'10:04'},
+    {id:4,out:true,text:'Да, glassmorphism смотрится очень круто!',time:'10:05',reactions:[{emoji:'👍',count:2}]},
+  ]},
+  {id:'c2',name:'Маша Иванова',online:true,messages:[
+    {id:1,out:false,text:'Привет, когда встречаемся?',time:'09:30'},
+    {id:2,out:true,text:'Завтра в 18:00 удобно?',time:'09:32'},
+    {id:3,out:false,text:'Договорились! 🎉',time:'09:33'},
+  ]},
+  {id:'c3',name:'Команда Riffy',online:false,messages:[
+    {id:1,out:false,text:'Кто готов к релизу?',time:'Вчера'},
+    {id:2,out:true,text:'Я готов! Деплоим?',time:'Вчера'},
+    {id:3,out:false,text:'Ещё пара правок и погнали 🚀',time:'Вчера'},
+  ]},
+  {id:'c4',name:'Дима К.',online:false,messages:[
+    {id:1,out:false,text:'Слушай, можешь глянуть PR?',time:'Пн'},
+    {id:2,out:true,text:'Конечно, щас посмотрю',time:'Пн'},
+  ]},
+  {id:'c5',name:'Лена Смирнова',online:true,messages:[
+    {id:1,out:false,text:'Как тебе новый интерфейс?',time:'Вс'},
+    {id:2,out:true,text:'Обожаю! Особенно нижняя панель со стеклом 😍',time:'Вс'},
+    {id:3,out:false,text:'Согласна, выглядит как нативное iOS',time:'Вс'},
+  ]},
+];
+
+let chats = [];
+let activeChat = null;
+
+// ── THEME ──
+let theme = localStorage.getItem('riffy_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', theme);
+
+function toggleTheme() {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('riffy_theme', theme);
+  updateThemeIcons();
+}
+function updateThemeIcons() {
+  const icon = theme === 'dark' ? '🌙' : '☀️';
+  document.querySelectorAll('#theme-btn-app').forEach(b => b.textContent = icon);
+}
+document.addEventListener('DOMContentLoaded', updateThemeIcons);
+
+// ── iOS 26 LONG PRESS ──
+let pressTimer = null;
+let pressTarget = null;
+const LONG_PRESS_MS = 420;
+
+function startPress(e, type) {
+  pressTarget = type;
+  pressTimer = setTimeout(() => {
+    if (pressTarget === type) {
+      showContextMenu(e, type);
+    }
+  }, LONG_PRESS_MS);
+  // visual feedback
+  const btn = type === 'login' ? document.getElementById('btn-login') : document.getElementById('btn-register');
+  if (btn) btn.classList.add('pressing');
+}
+
+function endPress(e, type) {
+  if (pressTimer) {
+    clearTimeout(pressTimer);
+    pressTimer = null;
+  }
+  pressTarget = null;
+  const btn = type === 'login' ? document.getElementById('btn-login') : document.getElementById('btn-register');
+  if (btn) btn.classList.remove('pressing');
+}
+
+function cancelPress() {
+  if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+  pressTarget = null;
+  document.querySelectorAll('.btn-primary').forEach(b => b.classList.remove('pressing'));
+}
+
+function showContextMenu(e, type) {
+  e.preventDefault && e.preventDefault();
+  cancelPress();
+
+  const menu = document.getElementById('ios-context-menu');
+  const overlay = document.getElementById('ctx-overlay');
+  const content = document.getElementById('ctx-content');
+
+  const isLogin = type === 'login';
+  const title = isLogin ? 'Войти' : 'Создать аккаунт';
+  const sub = isLogin ? 'Выберите действие' : 'Параметры входа';
+
+  content.innerHTML = `
+    <div class="ctx-header">
+      <div class="ctx-header-title">${title}</div>
+      <div class="ctx-header-sub">${sub}</div>
+    </div>
+    ${isLogin ? `
+    <div class="ctx-item" onclick="doLogin();hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon blue">🔑</div>
+        <span class="ctx-label blue">Войти</span>
+      </div>
+      <span style="color:var(--ios-text-dim);font-size:13px;">→</span>
+    </div>
+    <div class="ctx-item" onclick="switchTab('register');hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon green">✨</div>
+        <span class="ctx-label green">Регистрация</span>
+      </div>
+      <span style="color:var(--ios-text-dim);font-size:13px;">→</span>
+    </div>
+    <div class="ctx-item" onclick="demoLogin();hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon" style="background:rgba(255,255,255,0.1);">🎮</div>
+        <span class="ctx-label">Демо-режим</span>
+      </div>
+      <span style="color:var(--ios-text-dim);font-size:13px;">→</span>
+    </div>
+    ` : `
+    <div class="ctx-item" onclick="doRegister();hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon green">✅</div>
+        <span class="ctx-label green">Создать аккаунт</span>
+      </div>
+      <span style="color:var(--ios-text-dim);font-size:13px;">→</span>
+    </div>
+    <div class="ctx-item" onclick="switchTab('login');hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon blue">🔑</div>
+        <span class="ctx-label blue">Уже есть аккаунт</span>
+      </div>
+      <span style="color:var(--ios-text-dim);font-size:13px;">→</span>
+    </div>
+    <div class="ctx-item" onclick="clearForm();hideContextMenu()">
+      <div class="ctx-item-left">
+        <div class="ctx-icon red">🗑️</div>
+        <span class="ctx-label red">Очистить форму</span>
+      </div>
+    </div>
+    `}
+  `;
+
+  // Position near the button
+  const clientX = e.clientX || e.touches?.[0]?.clientX || window.innerWidth / 2;
+  const clientY = e.clientY || e.touches?.[0]?.clientY || window.innerHeight / 2;
+
+  menu.style.display = 'block';
+  menu.classList.remove('visible');
+  // reset
+  menu.style.left = '';
+  menu.style.right = '';
+  menu.style.top = '';
+  menu.style.bottom = '';
+
+  const menuW = 260;
+  const menuH = content.scrollHeight || 200;
+
+  let left = clientX - menuW / 2;
+  let top = clientY - menuH - 20;
+
+  if (left < 10) left = 10;
+  if (left + menuW > window.innerWidth - 10) left = window.innerWidth - menuW - 10;
+  if (top < 10) top = clientY + 20;
+
+  menu.style.left = left + 'px';
+  menu.style.top = top + 'px';
+  menu.style.transformOrigin = `${clientX - left}px ${clientY < top ? '0%' : '100%'}`;
+
+  requestAnimationFrame(() => menu.classList.add('visible'));
+  overlay.classList.add('visible');
+}
+
+function hideContextMenu() {
+  const menu = document.getElementById('ios-context-menu');
+  const overlay = document.getElementById('ctx-overlay');
+  menu.classList.remove('visible');
+  overlay.classList.remove('visible');
+  setTimeout(() => { menu.style.display = 'none'; }, 180);
+}
+
+function demoLogin() {
+  // Demo mode: bypass auth, use fake profile
+  currentUser = { id: 'demo', username: 'demo', phone: '+70000000000', name: 'Demo' };
+  localStorage.setItem('riffy_current', JSON.stringify(currentUser));
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('lang-dialog-overlay').classList.add('visible');
+}
+
+function clearForm() {
+  document.querySelectorAll('.form-input').forEach(i => i.value = '');
+}
+
+// ── AUTH ──
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  const tabsEl = document.getElementById('auth-tabs-bar');
+  const loginForm = document.getElementById('login-form');
+  const regForm = document.getElementById('register-form');
+
+  if (isLogin) {
+    tabsEl.classList.remove('on-register');
+  } else {
+    tabsEl.classList.add('on-register');
+  }
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0 && isLogin) || (i===1 && !isLogin));
+  });
+  const showForm = isLogin ? loginForm : regForm;
+  const hideForm = isLogin ? regForm : loginForm;
+  // 1. Instantly hide outgoing (no transition) — goes to absolute, frees height
+  hideForm.classList.remove('visible-panel');
+  hideForm.classList.add('hidden-panel');
+  // 2. Double RAF: first frame applies position:relative, second starts the transition
+  requestAnimationFrame(() => {
+    showForm.classList.remove('hidden-panel');
+    showForm.classList.add('visible-panel');
+  });
+  hideError();
+  if (window._trackTab) window._trackTab(tab);
+}
+
+// ── iOS 26 DRAG-TO-SWITCH SEGMENT CONTROL (touch only) ──
+(function() {
+  let isDragging = false;
+  let startX = 0;
+  let startTab = 'login';
+  let pillWidth = 0;
+  let currentTab = 'login';
+
+  function getTabsEl() { return document.getElementById('auth-tabs-bar'); }
+  function getSlider() { return getTabsEl()?.querySelector('.auth-tabs-slider'); }
+  function getPillW() {
+    const t = getTabsEl();
+    return t ? (t.offsetWidth - 6) / 2 : 0;
+  }
+
+  function onTouchStart(e) {
+    const tabsEl = getTabsEl();
+    if (!tabsEl) return;
+    isDragging = false;
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startTab = currentTab;
+    pillWidth = getPillW();
+    tabsEl._dragActive = true;
+  }
+
+  function onTouchMove(e) {
+    const tabsEl = getTabsEl();
+    if (!tabsEl || !tabsEl._dragActive) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - startX;
+
+    if (Math.abs(dx) > 5) {
+      isDragging = true;
+      tabsEl.classList.add('dragging');
+      e.preventDefault();
+    }
+    if (!isDragging) return;
+
+    const slider = getSlider();
+    if (!slider) return;
+
+    const baseOffset = startTab === 'register' ? pillWidth : 0;
+    let offset = Math.max(0, Math.min(pillWidth, baseOffset + dx));
+    slider.style.transform = `translate3d(${offset}px,0,0)`;
+
+    const progress = offset / pillWidth;
+    document.querySelectorAll('.auth-tab').forEach((t,i) => {
+      t.classList.toggle('active', i === (progress < 0.5 ? 0 : 1));
+    });
+  }
+
+  function onTouchEnd(e) {
+    const tabsEl = getTabsEl();
+    if (!tabsEl) return;
+    tabsEl._dragActive = false;
+    tabsEl.classList.remove('dragging');
+
+    if (!isDragging) { isDragging = false; return; }
+    isDragging = false;
+
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - startX;
+    const threshold = pillWidth * 0.28;
+
+    let landed;
+    if (startTab === 'login') {
+      landed = dx > threshold ? 'register' : 'login';
+    } else {
+      landed = dx < -threshold ? 'login' : 'register';
+    }
+
+    currentTab = landed;
+    const slider = getSlider();
+    if (slider) slider.style.transform = '';
+    switchTab(landed);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabsEl = getTabsEl();
+    if (!tabsEl) return;
+    tabsEl.addEventListener('touchstart', onTouchStart, {passive:true});
+    tabsEl.addEventListener('touchmove', onTouchMove, {passive:false});
+    tabsEl.addEventListener('touchend', onTouchEnd, {passive:true});
+    // Desktop: no drag, just click on tabs (handled by onclick)
+    // Remove grab cursor on desktop
+    if (!('ontouchstart' in window)) {
+      tabsEl.style.cursor = 'default';
+    }
+  });
+
+  window._trackTab = function(tab) { currentTab = tab; };
+})();
+
+function showError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg; el.classList.add('show');
+}
+function hideError() {
+  document.getElementById('auth-error').classList.remove('show');
+}
+
+function showForgotToast() {
+  const t = document.getElementById('auth-toast');
+  t.textContent = '🔒 Восстановление пароля скоро будет доступно';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── HELPERS ──
+function setBtnLoading(id, loading) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.disabled = loading;
+  if (loading) btn.dataset.orig = btn.textContent, btn.textContent = '…';
+  else btn.textContent = btn.dataset.orig || btn.textContent;
+}
+
+// ── USERNAME CHECK ──
+let usernameCheckTimer = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('reg-user');
+  if (!inp) return;
+  inp.addEventListener('input', () => {
+    clearTimeout(usernameCheckTimer);
+    const val = inp.value.trim().replace('@','');
+    const st = document.getElementById('reg-user-status');
+    if (!val) { st.textContent = ''; return; }
+    st.textContent = '⏳ Проверяем...'; st.style.color = 'var(--text2)';
+    usernameCheckTimer = setTimeout(() => checkUsernameAvailability(val, st), 600);
+  });
+});
+
+async function checkUsernameAvailability(username, statusEl) {
+  const r = await sbFetch(`/rest/v1/profiles?username=eq.${encodeURIComponent(username)}&select=username`, { method: 'GET' });
+  if (!r.ok) { statusEl.textContent = ''; return; }
+  if (r.data && r.data.length > 0) {
+    statusEl.textContent = '✗ Занят'; statusEl.style.color = 'var(--ios-red)';
+  } else {
+    statusEl.textContent = '✓ Свободен'; statusEl.style.color = 'var(--ios-green)';
+  }
+}
+
+// ── REGISTER: STEP 1 → SEND OTP ──
+async function doRegisterSendOtp(isResend = false) {
+  const email    = document.getElementById('reg-email').value.trim();
+  const username = document.getElementById('reg-user').value.trim().replace('@','');
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Введите корректный email'); return; }
+  if (!username || username.length < 3) { showError('Имя пользователя минимум 3 символа'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) { showError('Только латиница, цифры и _'); return; }
+
+  setBtnLoading('btn-register', true);
+  hideError();
+
+  // Check username taken (with timeout so it never hangs)
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 3000);
+    const chk = await sbFetch(`/rest/v1/profiles?username=eq.${encodeURIComponent(username)}&select=username`, { method: 'GET' });
+    clearTimeout(tid);
+    if (chk.ok && chk.data && chk.data.length > 0) {
+      setBtnLoading('btn-register', false);
+      showError('Этот логин уже занят');
+      return;
+    }
+  } catch(e) { /* ignore timeout, proceed */ }
+
+  const r = await sbFetch('/auth/v1/otp', {
+    method: 'POST',
+    body: JSON.stringify({ email, create_user: true }),
+  });
+
+  setBtnLoading('btn-register', false);
+
+  if (!r.ok) {
+    const msg = r.data?.error_description || r.data?.msg || '';
+    if (msg.toLowerCase().includes('already') || msg.toLowerCase().includes('registered')) {
+      showError('Этот email уже зарегистрирован. Войдите через вкладку «Войти».');
+    } else {
+      showError(msg || 'Ошибка отправки кода');
+    }
+    return;
+  }
+
+  window._regEmail    = email;
+  window._regUsername = username;
+
+  document.getElementById('reg-email-display').textContent = email;
+  document.getElementById('reg-step1').style.display = 'none';
+  document.getElementById('reg-step2').style.display = 'block';
+  document.getElementById('reg-otp').value = '';
+  setTimeout(() => {
+    document.getElementById('reg-otp').focus();
+    tryPasteOtp('reg-otp', 'doRegisterVerifyOtp');
+  }, 100);
+  hideError();
+  if (!isResend) startResendCountdown('reg-resend-btn');
+}
+
+// ── REGISTER: STEP 2 → VERIFY OTP ──
+async function doRegisterVerifyOtp() {
+  const token = document.getElementById('reg-otp').value.trim();
+  if (token.length < 6) { showError('Введите 6-значный код'); return; }
+
+  hideError();
+  const verifyBtn = document.querySelector('#reg-step2 .btn-primary');
+  if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.textContent = '…'; }
+
+  const r = await sbFetch('/auth/v1/verify', {
+    method: 'POST',
+    body: JSON.stringify({ email: window._regEmail, token, type: 'signup' }),
+  });
+
+  if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.textContent = 'Подтвердить'; }
+
+  if (!r.ok) {
+    showError(r.data?.error_description || r.data?.msg || 'Неверный код');
+    return;
+  }
+
+  supabaseSession = r.data;
+  localStorage.setItem('riffy_session', JSON.stringify(supabaseSession));
+
+  const userId = r.data?.user?.id;
+  if (userId) {
+    await sbFetch('/rest/v1/profiles', {
+      method: 'POST',
+      body: JSON.stringify({ id: userId, username: window._regUsername, email: window._regEmail }),
+      headers: { 'Prefer': 'return=minimal' },
+    });
+  }
+
+  currentUser = { id: userId, username: window._regUsername, email: window._regEmail, name: window._regUsername };
+  localStorage.setItem('riffy_current', JSON.stringify(currentUser));
+  document.getElementById('auth-screen').style.display = 'none';
+  window._isNewRegistration = true;
+  document.getElementById('lang-dialog-overlay').classList.add('visible');
+}
+
+function backToRegStep1() {
+  document.getElementById('reg-step1').style.display = 'block';
+  document.getElementById('reg-step2').style.display = 'none';
+  hideError();
+}
+
+// ── LOGIN: STEP 1 → SEND OTP ──
+async function doLoginSendOtp(isResend = false) {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Введите корректный email'); return; }
+
+  setBtnLoading('btn-login', true);
+  hideError();
+
+  const r = await sbFetch('/auth/v1/otp', {
+    method: 'POST',
+    body: JSON.stringify({ email, create_user: false }),
+  });
+
+  setBtnLoading('btn-login', false);
+
+  if (!r.ok) {
+    showError(r.data?.error_description || r.data?.msg || 'Ошибка отправки кода');
+    return;
+  }
+
+  window._loginEmail = email;
+  document.getElementById('login-email-display').textContent = email;
+  document.getElementById('login-step1').style.display = 'none';
+  document.getElementById('login-step2').style.display = 'block';
+  document.getElementById('login-otp').value = '';
+  setTimeout(() => {
+    document.getElementById('login-otp').focus();
+    tryPasteOtp('login-otp', 'doLoginVerifyOtp');
+  }, 100);
+  hideError();
+  if (!isResend) startResendCountdown('login-resend-btn');
+}
+
+// ── LOGIN: STEP 2 → VERIFY OTP ──
+async function doLoginVerifyOtp() {
+  const token = document.getElementById('login-otp').value.trim();
+  if (token.length < 6) { showError('Введите 6-значный код'); return; }
+
+  hideError();
+  const verifyBtn = document.querySelector('#login-step2 .btn-primary');
+  if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.textContent = '…'; }
+
+  const r = await sbFetch('/auth/v1/verify', {
+    method: 'POST',
+    body: JSON.stringify({ email: window._loginEmail, token, type: 'magiclink' }),
+  });
+
+  if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.textContent = 'Войти'; }
+
+  if (!r.ok) {
+    showError(r.data?.error_description || r.data?.msg || 'Неверный код');
+    return;
+  }
+
+  supabaseSession = r.data;
+  localStorage.setItem('riffy_session', JSON.stringify(supabaseSession));
+
+  const userId = r.data?.user?.id;
+
+  let username = '';
+  if (userId) {
+    const pr = await sbFetch(`/rest/v1/profiles?id=eq.${userId}&select=username,email`, { method: 'GET' });
+    if (pr.ok && pr.data && pr.data[0]) username = pr.data[0].username || '';
+  }
+
+  if (!username) {
+    showError('Аккаунт не найден. Сначала зарегистрируйтесь.');
+    backToLoginStep1();
+    return;
+  }
+
+  currentUser = { id: userId, username, email: window._loginEmail, name: username };
+  localStorage.setItem('riffy_current', JSON.stringify(currentUser));
+  document.getElementById('auth-screen').style.display = 'none';
+  window._isNewRegistration = false;
+  if (localStorage.getItem('riffy_lang')) {
+    enterApp();
+  } else {
+    document.getElementById('lang-dialog-overlay').classList.add('visible');
+  }
+}
+
+function backToLoginStep1() {
+  document.getElementById('login-step1').style.display = 'block';
+  document.getElementById('login-step2').style.display = 'none';
+  hideError();
+}
+
+// ── OTP AUTO-SUBMIT ──
+function handleOtpInput(el, submitFn) {
+  // Only digits
+  el.value = el.value.replace(/\D/g,'');
+  if (el.value.length === 6) {
+    setTimeout(() => window[submitFn](), 120);
+  }
+}
+
+// Auto-paste from clipboard when OTP step appears
+async function tryPasteOtp(inputId, submitFn) {
+  try {
+    const text = await navigator.clipboard.readText();
+    const digits = text.replace(/\D/g,'').slice(0,6);
+    if (digits.length === 6) {
+      const el = document.getElementById(inputId);
+      if (el) {
+        el.value = digits;
+        setTimeout(() => window[submitFn](), 300);
+      }
+    }
+  } catch(e) { /* clipboard access denied, ignore */ }
+}
+function startResendCountdown(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  let sec = 60;
+  btn.disabled = true;
+  const tick = () => {
+    btn.textContent = `Отправить снова (${sec}с)`;
+    if (--sec < 0) { btn.disabled = false; btn.textContent = 'Отправить снова'; return; }
+    setTimeout(tick, 1000);
+  };
+  tick();
+}
+
+function doLogout() {
+  currentUser = null;
+  supabaseSession = null;
+  localStorage.removeItem('riffy_current');
+  localStorage.removeItem('riffy_session');
+  activeChat = null;
+  document.getElementById('app-screen').classList.remove('visible');
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  // Reset forms to step 1
+  const ls1 = document.getElementById('login-step1');
+  const ls2 = document.getElementById('login-step2');
+  if (ls1) ls1.style.display = '';
+  if (ls2) ls2.style.display = 'none';
+  switchTab('login');
+}
+
+function enterApp() {
+  hideError();
+  // Make absolutely sure hello and auth screens are hidden
+  const helloScreen = document.getElementById('hello-screen');
+  helloScreen.classList.remove('visible');
+  helloScreen.removeAttribute('style');
+
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('lang-dialog-overlay').classList.remove('visible');
+
+  const app = document.getElementById('app-screen');
+  app.style.display = 'flex';
+  app.classList.add('visible');
+  const av = document.getElementById('pm-avatar');
+  av.style.background = avatarFor(currentUser.username || currentUser.name);
+  av.textContent = initials(currentUser.name);
+  document.getElementById('pm-name').textContent = currentUser.name;
+  document.getElementById('pm-tag').textContent = '@' + (currentUser.username || 'user');
+  renderChatList();
+  updateThemeIcons();
+}
+
+if (currentUser) { enterApp(); }
+
+// ── CHAT LIST ──
+function renderChatList(filter = '') {
+  const list = document.getElementById('chats-list');
+  list.innerHTML = '';
+  const filtered = chats.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+  if (filtered.length === 0) {
+    list.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:40px 16px;color:var(--text3);">
+      <div style="font-size:36px;opacity:0.4;">💬</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text3);text-align:center;">Нет чатов пока что</div>
+    </div>`;
+    return;
+  }
+  filtered.forEach(chat => {
+    const last = chat.messages[chat.messages.length - 1];
+    const unread = !last?.out ? 1 : 0;
+    const item = document.createElement('div');
+    item.className = 'chat-item' + (activeChat?.id === chat.id ? ' active' : '');
+    item.onclick = () => openChat(chat);
+    item.innerHTML = `
+      <div class="chat-avatar" style="background:${avatarFor(chat.name)}">
+        ${initials(chat.name)}
+        ${chat.online ? '<div class="avatar-dot"></div>' : ''}
+      </div>
+      <div class="chat-info">
+        <div class="chat-row">
+          <div class="chat-name">${chat.name}</div>
+          <div class="chat-time">${last?.time || ''}</div>
+        </div>
+        <div class="chat-row" style="margin-top:1px">
+          <div class="chat-preview">${last?.out ? '✓ ' : ''}${last?.text || ''}</div>
+          ${unread ? `<div class="chat-unread">${unread}</div>` : ''}
+        </div>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function filterChats(val) { renderChatList(val); }
+
+// ── OPEN CHAT ──
+function openChat(chat) {
+  activeChat = chat;
+  renderChatList();
+
+  // Mobile: hide sidebar
+  if (window.innerWidth <= 640) {
+    document.getElementById('sidebar').classList.add('hidden');
+  }
+
+  const area = document.getElementById('chat-area');
+  area.innerHTML = `
+    <div class="chat-header">
+      <button class="back-btn" onclick="closeMobileChat()">‹</button>
+      <div class="chat-header-avatar" style="background:${avatarFor(chat.name)}">${initials(chat.name)}</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name">${chat.name}</div>
+        <div class="chat-header-status">
+          ${chat.online ? `<div class="status-dot"></div> В сети` : 'Был(а) недавно'}
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="icon-btn" title="Звонок">📞</button>
+        <button class="icon-btn" title="Видео">📹</button>
+      </div>
+    </div>
+    <div class="messages-area" id="messages-area"></div>
+    <div class="input-bar">
+      <div class="input-wrap">
+        <button class="attach-btn" title="Файл">📎</button>
+        <textarea class="msg-input" id="msg-input" placeholder="Написать..." rows="1"
+          oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+        <button class="attach-btn" title="Emoji">😊</button>
+      </div>
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  `;
+
+  renderMessages();
+  setTimeout(() => scrollToBottom(), 30);
+}
+
+function closeMobileChat() {
+  document.getElementById('sidebar').classList.remove('hidden');
+  document.getElementById('chat-area').innerHTML = `
+    <div class="no-chat">
+      <div class="empty-icon">💬</div>
+      <div class="empty-title">Выберите чат</div>
+      <div style="font-size:13px;color:var(--text3);text-align:center;max-width:220px;line-height:1.5;margin-top:4px;">
+        Выберите диалог слева или начните новый
+      </div>
+    </div>
+  `;
+  activeChat = null;
+  renderChatList();
+}
+
+function renderMessages() {
+  if (!activeChat) return;
+  const area = document.getElementById('messages-area');
+  if (!area) return;
+  area.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'date-divider';
+  div.innerHTML = '<div class="date-pill">Сегодня</div>';
+  area.appendChild(div);
+
+  activeChat.messages.forEach(msg => {
+    const wrap = document.createElement('div');
+    wrap.className = `msg-wrap ${msg.out ? 'out' : 'in'}`;
+    const avatarHtml = !msg.out ? `<div class="msg-avatar-small" style="background:${avatarFor(activeChat.name)}">${initials(activeChat.name)}</div>` : '';
+    const reactionsHtml = msg.reactions ? `<div class="msg-reactions">${msg.reactions.map(r=>`<div class="reaction"><span>${r.emoji}</span><span class="reaction-count">${r.count}</span></div>`).join('')}</div>` : '';
+    wrap.innerHTML = `
+      ${avatarHtml}
+      <div>
+        <div class="bubble">
+          ${msg.text}
+          <div class="bubble-time">
+            ${msg.time}
+            ${msg.out ? '<span class="check-icon">✓✓</span>' : ''}
+          </div>
+        </div>
+        ${reactionsHtml}
+      </div>
+    `;
+    area.appendChild(wrap);
+  });
+
+  const typing = document.createElement('div');
+  typing.className = 'typing-bubble';
+  typing.id = 'typing-indicator';
+  typing.innerHTML = `
+    <div class="msg-avatar-small" style="background:${avatarFor(activeChat.name)}">${initials(activeChat.name)}</div>
+    <div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  `;
+  area.appendChild(typing);
+}
+
+function scrollToBottom() {
+  const area = document.getElementById('messages-area');
+  if (area) area.scrollTop = area.scrollHeight;
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function sendMessage() {
+  const input = document.getElementById('msg-input');
+  if (!input || !activeChat) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const now = new Date();
+  const time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  activeChat.messages.push({ id:Date.now(), out:true, text, time });
+  input.value = ''; input.style.height = 'auto';
+  renderMessages(); scrollToBottom(); renderChatList();
+
+  setTimeout(() => {
+    const ind = document.getElementById('typing-indicator');
+    if (ind) ind.classList.add('show');
+    scrollToBottom();
+  }, 400);
+
+  setTimeout(() => {
+    const replies = ['Отлично! 👍','Понял, спасибо!','Хорошо, буду знать 😊','Супер! Riffy лучший 🔥','Договорились!','Окей, погнали!','Да, всё верно!','Интересно... 🤔'];
+    const reply = replies[Math.floor(Math.random()*replies.length)];
+    const rTime = new Date();
+    const rStr = rTime.getHours() + ':' + String(rTime.getMinutes()).padStart(2,'0');
+    activeChat.messages.push({ id:Date.now()+1, out:false, text:reply, time:rStr });
+    renderMessages(); scrollToBottom(); renderChatList();
+  }, 1600);
+}
+
+function setNav(el, tab) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ══════════ NICKNAME SCREEN ══════════
+
+let _nickCheckTimer = null;
+
+function showNicknameScreen() {
+  const sc = document.getElementById('nickname-screen');
+  sc.classList.add('visible');
+  const inp = document.getElementById('nickname-input');
+  // Pre-fill with current display name
+  if (currentUser && currentUser.name) inp.value = currentUser.name;
+  inp.focus();
+}
+
+function onNicknameInput(el) {
+  const val = el.value.trim();
+  const st = document.getElementById('nickname-status');
+  if (!val) { st.textContent = ''; return; }
+  if (val.length < 2) {
+    st.textContent = 'Минимум 2 символа'; st.style.color = 'var(--ios-red)';
+  } else {
+    st.textContent = ''; 
+  }
+}
+
+async function saveNickname() {
+  const val = document.getElementById('nickname-input').value.trim();
+  const st = document.getElementById('nickname-status');
+  if (!val || val.length < 2) { st.textContent = 'Минимум 2 символа'; st.style.color = 'var(--ios-red)'; return; }
+
+  // Check for duplicate display name among other users
+  if (currentUser && currentUser.id && currentUser.id !== 'demo') {
+    try {
+      const checkRes = await sbFetch(`/rest/v1/profiles?display_name=eq.${encodeURIComponent(val)}&id=neq.${currentUser.id}&select=id`, {});
+      const existing = await checkRes.json();
+      if (Array.isArray(existing) && existing.length > 0) {
+        // Duplicate — clear input and show error
+        const inp = document.getElementById('nickname-input');
+        inp.value = '';
+        inp.style.borderColor = 'var(--ios-red)';
+        inp.style.boxShadow = '0 0 0 3px rgba(255,69,58,0.15)';
+        st.textContent = 'Этот никнейм уже занят, попробуйте другой';
+        st.style.color = 'var(--ios-red)';
+        setTimeout(() => {
+          inp.style.borderColor = '';
+          inp.style.boxShadow = '';
+        }, 1800);
+        return;
+      }
+    } catch(e) { /* network error — proceed anyway */ }
+
+    await sbFetch(`/rest/v1/profiles?id=eq.${currentUser.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ display_name: val }),
+      headers: { 'Prefer': 'return=minimal' },
+    });
+  }
+
+  if (currentUser) {
+    currentUser.name = val;
+    localStorage.setItem('riffy_current', JSON.stringify(currentUser));
+  }
+
+  // Hide nickname screen, show success overlay
+  const sc = document.getElementById('nickname-screen');
+  sc.style.transition = 'opacity 0.3s ease';
+  sc.style.opacity = '0';
+  setTimeout(() => {
+    sc.classList.remove('visible');
+    sc.removeAttribute('style');
+    // Show success overlay
+    const ov = document.getElementById('nickname-success-overlay');
+    document.getElementById('success-name-display').textContent = val;
+    ov.classList.add('visible');
+    if (window._initGotovLottie) window._initGotovLottie();
+  }, 300);
+}
+
+function skipNickname() {
+  const sc = document.getElementById('nickname-screen');
+  sc.style.transition = 'opacity 0.4s ease';
+  sc.style.opacity = '0';
+  setTimeout(() => {
+    sc.classList.remove('visible');
+    sc.removeAttribute('style');
+    enterApp();
+  }, 400);
+}
+
+
+function chooseLang(isRu) {
+  localStorage.setItem('riffy_lang', isRu ? 'ru' : 'en');
+  document.getElementById('lang-dialog-overlay').classList.remove('visible');
+  if (window._isNewRegistration) {
+    window._isNewRegistration = false;
+    showHelloScreen(isRu);
+  } else {
+    enterApp();
+  }
+}
+
+function showHelloScreen(isRu) {
+  const screen   = document.getElementById('hello-screen');
+  const greeting = document.getElementById('hello-greeting');
+  const welcome  = document.getElementById('hello-welcome');
+
+  // Reset
+  greeting.classList.remove('show','hide');
+  welcome.classList.remove('show');
+  screen.removeAttribute('style');
+
+  const greetWord   = isRu ? 'Здравствуйте' : 'Hello';
+  const welcomeText = isRu ? 'Добро пожаловать' : 'Welcome';
+
+  greeting.textContent = greetWord;
+  welcome.innerHTML    = welcomeText;
+
+  // Show screen
+  screen.classList.add('visible');
+  setTimeout(() => ['orb-a','orb-b','orb-c'].forEach(id => document.getElementById(id).classList.add('show')), 60);
+
+  // 1. Greeting появляется
+  setTimeout(() => {
+    greeting.classList.add('show');
+  }, 150);
+
+  // 2. Greeting исчезает вверх
+  setTimeout(() => {
+    greeting.classList.add('hide');
+  }, 1800);
+
+  // 3. Welcome появляется снизу
+  setTimeout(() => {
+    welcome.classList.add('show');
+  }, 2200);
+
+  // 4. Весь экран тускнеет → никнейм экран
+  setTimeout(() => {
+    screen.style.transition = 'opacity 0.7s ease';
+    screen.style.opacity    = '0';
+    setTimeout(() => {
+      screen.classList.remove('visible');
+      screen.removeAttribute('style');
+      greeting.classList.remove('show','hide');
+      welcome.classList.remove('show');
+      ['orb-a','orb-b','orb-c'].forEach(id => document.getElementById(id).classList.remove('show'));
+      showNicknameScreen();
+    }, 720);
+  }, 3600);
+}
+</script>
+<!-- ══════════ MAIL LOTTIE INIT ══════════ -->
+<script>
+(function(){
+  // Gmail-style Lottie: красный конверт с M, bounce + flap анимация
+  var mailLottieData = {"v":"5.7.4","fr":30,"ip":0,"op":90,"w":64,"h":64,"nm":"gmail","ddd":0,"assets":[],"layers":[
+  {"ddd":0,"ind":1,"ty":4,"nm":"shadow","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":0,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":12,"s":[18]},{"t":25,"s":[18]}],"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[32,54,0],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":0,"s":[0,0,100]},{"t":25,"s":[100,100,100]}],"ix":6}},"ao":0,"shapes":[{"ty":"el","d":1,"s":{"a":0,"k":[44,8],"ix":2},"p":{"a":0,"k":[0,0],"ix":3},"nm":"ellipse","mn":"ADBE Vector Shape - Ellipse","hd":false},{"ty":"fl","c":{"a":0,"k":[0,0,0,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"ip":0,"op":90,"st":0,"bm":0},
+  {"ddd":0,"ind":2,"ty":4,"nm":"envelope","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":0,"s":[32,-10,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":14,"s":[32,34,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":20,"s":[32,30,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[32,32,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":60,"s":[32,32,0],"to":[0,0,0],"ti":[0,0,0]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":70,"s":[32,29,0],"to":[0,0,0],"ti":[0,0,0]},{"t":80,"s":[32,32,0]}],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[
+    {"ty":"gr","it":[{"ty":"rc","d":1,"s":{"a":0,"k":[56,40],"ix":2},"p":{"a":0,"k":[0,2],"ix":3},"r":{"a":0,"k":4,"ix":4},"nm":"body","mn":"ADBE Vector Shape - Rect","hd":false},{"ty":"fl","c":{"a":0,"k":[0.921,0.259,0.208,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill Red","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"body","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false},
+    {"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0]],"v":[[-28,-18],[-10,2],[0,-8],[10,2],[28,-18]],"c":false},"ix":2},"nm":"M left","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"st","c":{"a":0,"k":[1,1,1,1],"ix":3},"o":{"a":0,"k":100,"ix":4},"w":{"a":0,"k":4.5,"ix":5},"lc":2,"lj":2,"bm":0,"nm":"M stroke","mn":"ADBE Vector Graphic - Stroke","hd":false},{"ty":"tr","p":{"a":0,"k":[0,2],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"M-shape","np":3,"cix":2,"bm":0,"ix":2,"mn":"ADBE Vector Group","hd":false},
+    {"ty":"gr","it":[{"ind":0,"ty":"sh","ix":1,"ks":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":25,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-28,-18],[0,-2],[28,-18]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":40,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-28,-18],[0,4],[28,-18]],"c":false}]},{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":55,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-28,-18],[0,-2],[28,-18]],"c":false}]},{"t":70,"s":[{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-28,-18],[0,4],[28,-18]],"c":false}]}],"ix":2},"nm":"flap path","mn":"ADBE Vector Shape - Group","hd":false},{"ty":"fl","c":{"a":0,"k":[0.78,0.18,0.15,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"flap fill","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,2],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"flap","np":3,"cix":2,"bm":0,"ix":3,"mn":"ADBE Vector Group","hd":false}
+  ],"ip":0,"op":90,"st":0,"bm":0},
+  {"ddd":0,"ind":3,"ty":4,"nm":"sparkle1","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":14,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":22,"s":[100]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":35,"s":[100]},{"t":45,"s":[0]}],"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":14,"s":[0]},{"t":45,"s":[90]}],"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":14,"s":[32,32,0],"to":[-6,-6,0],"ti":[6,6,0]},{"t":45,"s":[8,8,0]}],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":14,"s":[0,0,100]},{"t":22,"s":[100,100,100]}],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","sy":1,"d":1,"pt":{"a":0,"k":4,"ix":3},"p":{"a":0,"k":[0,0],"ix":4},"r":{"a":0,"k":45,"ix":5},"ir":{"a":0,"k":2,"ix":8},"is":{"a":0,"k":0,"ix":9},"or":{"a":0,"k":5,"ix":7},"os":{"a":0,"k":0,"ix":10},"ix":1,"nm":"star","mn":"ADBE Vector Shape - Star","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.85,0.1,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"star","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":14,"op":50,"st":0,"bm":0},
+  {"ddd":0,"ind":4,"ty":4,"nm":"sparkle2","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":18,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":26,"s":[100]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":38,"s":[100]},{"t":48,"s":[0]}],"ix":11},"r":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":18,"s":[0]},{"t":48,"s":[-120]}],"ix":10},"p":{"a":1,"k":[{"i":{"x":0.667,"y":1},"o":{"x":0.333,"y":0},"t":18,"s":[32,32,0],"to":[7,-5,0],"ti":[-7,5,0]},{"t":48,"s":[56,4,0]}],"ix":2},"a":{"a":0,"k":[0,0,0],"ix":1},"s":{"a":0,"k":[100,100,100],"ix":6}},"ao":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","sy":1,"d":1,"pt":{"a":0,"k":4,"ix":3},"p":{"a":0,"k":[0,0],"ix":4},"r":{"a":0,"k":0,"ix":5},"ir":{"a":0,"k":1.5,"ix":8},"is":{"a":0,"k":0,"ix":9},"or":{"a":0,"k":3.5,"ix":7},"os":{"a":0,"k":0,"ix":10},"ix":1,"nm":"star","mn":"ADBE Vector Shape - Star","hd":false},{"ty":"fl","c":{"a":0,"k":[1,0.4,0.4,1],"ix":4},"o":{"a":0,"k":100,"ix":5},"r":1,"bm":0,"nm":"Fill","mn":"ADBE Vector Graphic - Fill","hd":false},{"ty":"tr","p":{"a":0,"k":[0,0],"ix":2},"a":{"a":0,"k":[0,0],"ix":1},"s":{"a":0,"k":[100,100],"ix":3},"r":{"a":0,"k":0,"ix":6},"o":{"a":0,"k":100,"ix":7},"sk":{"a":0,"k":0,"ix":4},"sa":{"a":0,"k":0,"ix":5},"nm":"Transform"}],"nm":"star2","np":3,"cix":2,"bm":0,"ix":1,"mn":"ADBE Vector Group","hd":false}],"ip":18,"op":52,"st":0,"bm":0}
+  ],"markers":[]};
+
+  var _mailAnims = {};
+
+  function initMailAnim(containerId) {
+    if (_mailAnims[containerId]) {
+      _mailAnims[containerId].destroy();
+      delete _mailAnims[containerId];
+    }
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    if (window.lottie) {
+      _mailAnims[containerId] = lottie.loadAnimation({
+        container: el,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: mailLottieData
+      });
+      _mailAnims[containerId].setSpeed(0.8);
+    } else {
+      setTimeout(function(){ initMailAnim(containerId); }, 50);
+    }
+  }
+
+  // Перехватываем показ step2 для login и register
+  var _origShowLoginStep2 = null;
+  var _origShowRegStep2 = null;
+
+  window.addEventListener('DOMContentLoaded', function() {
+    // Патчим функции перехода к step2
+    var loginBtn = document.getElementById('btn-login') || document.querySelector('#login-step1 .btn-primary');
+    var regBtn = document.getElementById('btn-register') || document.querySelector('#reg-step1 .btn-primary');
+
+    // Наблюдаем за изменением display у step2 через MutationObserver
+    function observeStep(stepId, lottieId) {
+      var el = document.getElementById(stepId);
+      if (!el) return;
+      var observer = new MutationObserver(function(muts) {
+        muts.forEach(function(m) {
+          if (m.type === 'attributes' && m.attributeName === 'style') {
+            if (el.style.display !== 'none') {
+              setTimeout(function(){ initMailAnim(lottieId); }, 50);
+            }
+          }
+        });
+      });
+      observer.observe(el, { attributes: true });
+    }
+
+    observeStep('login-step2', 'lottie-mail-login');
+    observeStep('reg-step2', 'lottie-mail-reg');
+  });
+})();
+</script>
+
+<!-- ══════════ LEGAL MODALS ══════════ -->
+<div id="legal-modal-overlay" onclick="hideLegalModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);"></div>
+<div id="legal-modal" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10000;width:min(92vw,480px);max-height:80vh;background:var(--bg2);border:1px solid var(--gborder2);border-radius:22px;overflow:hidden;display:none;flex-direction:column;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--divider);flex-shrink:0;">
+    <div id="legal-modal-title" style="font-size:16px;font-weight:700;color:var(--text);"></div>
+    <button onclick="hideLegalModal()" style="background:var(--glass);border:none;color:var(--text2);font-size:18px;width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <div id="legal-modal-body" style="overflow-y:auto;padding:20px;font-size:14px;line-height:1.7;color:var(--text2);-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<script>
+const LEGAL_CONTENT = {
+  terms: {
+    title: 'Условия использования',
+    body: `
+      <p style="color:var(--text);font-weight:600;margin-bottom:12px;">Последнее обновление: январь 2025</p>
+
+      <p>Используя Riffy, вы соглашаетесь с настоящими условиями. Пожалуйста, прочитайте их внимательно.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">1. Использование сервиса</h4>
+      <p>Riffy — мессенджер для общения. Вы соглашаетесь использовать его только в законных целях и не нарушать права других пользователей.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">2. Аккаунт</h4>
+      <p>Вы несёте ответственность за безопасность своего аккаунта. Не передавайте доступ третьим лицам. При обнаружении несанкционированного доступа немедленно свяжитесь с нами.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">3. Запрещённый контент</h4>
+      <p>Запрещено распространять: незаконный контент, спам, вредоносное ПО, материалы, нарушающие авторские права, а также контент, пропагандирующий насилие или дискриминацию.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">4. Прекращение доступа</h4>
+      <p>Мы оставляем за собой право заблокировать аккаунт при нарушении настоящих условий без предварительного уведомления.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">5. Изменения</h4>
+      <p>Мы можем обновлять условия. Продолжение использования сервиса после изменений означает ваше согласие с новой редакцией.</p>
+
+      <p style="margin-top:20px;padding-top:16px;border-top:1px solid var(--divider);">По вопросам: <span style="color:var(--text);">support@riffy.app</span></p>
+    `
+  },
+  privacy: {
+    title: 'Политика конфиденциальности',
+    body: `
+      <p style="color:var(--text);font-weight:600;margin-bottom:12px;">Последнее обновление: январь 2025</p>
+
+      <p>Мы серьёзно относимся к защите ваших данных. Эта политика объясняет, что мы собираем и как используем.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">1. Что мы собираем</h4>
+      <p>— Email адрес для входа и связи<br>
+      — Имя пользователя (username)<br>
+      — Сообщения в рамках сервиса<br>
+      — Техническая информация: IP, тип устройства, время входа</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">2. Как мы используем данные</h4>
+      <p>— Для предоставления функций сервиса<br>
+      — Для отправки кодов подтверждения<br>
+      — Для обеспечения безопасности аккаунта<br>
+      — Для улучшения работы приложения</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">3. Хранение данных</h4>
+      <p>Данные хранятся на защищённых серверах Supabase (EU). Мы не продаём ваши данные третьим лицам.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">4. Ваши права</h4>
+      <p>Вы можете запросить удаление аккаунта и всех связанных данных в любое время, написав нам на почту.</p>
+
+      <h4 style="color:var(--text);margin:16px 0 8px;">5. Cookies</h4>
+      <p>Мы используем только необходимые технические cookies для поддержания сессии.</p>
+
+      <p style="margin-top:20px;padding-top:16px;border-top:1px solid var(--divider);">По вопросам: <span style="color:var(--text);">privacy@riffy.app</span></p>
+    `
+  }
+};
+
+function showLegalModal(type) {
+  const content = LEGAL_CONTENT[type];
+  if (!content) return;
+  document.getElementById('legal-modal-title').textContent = content.title;
+  document.getElementById('legal-modal-body').innerHTML = content.body;
+  const overlay = document.getElementById('legal-modal-overlay');
+  const modal   = document.getElementById('legal-modal');
+  overlay.style.display = 'block';
+  modal.style.display   = 'flex';
+  requestAnimationFrame(() => {
+    overlay.style.opacity = '0';
+    modal.style.opacity   = '0';
+    modal.style.transform = 'translate(-50%,-50%) scale(0.95)';
+    modal.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    overlay.style.transition = 'opacity 0.2s ease';
+    requestAnimationFrame(() => {
+      overlay.style.opacity = '1';
+      modal.style.opacity   = '1';
+      modal.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+}
+
+function hideLegalModal() {
+  const overlay = document.getElementById('legal-modal-overlay');
+  const modal   = document.getElementById('legal-modal');
+  modal.style.opacity   = '0';
+  modal.style.transform = 'translate(-50%,-50%) scale(0.95)';
+  overlay.style.opacity = '0';
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    modal.style.display   = 'none';
+  }, 200);
+}
+</script>
+</body>
+</html>
